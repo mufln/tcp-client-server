@@ -1,0 +1,3 @@
+/Users/mufln/CLionProjects/tcp-client-server/cmake-build-debug/CMakeFiles/tcp_client_server.dir
+/Users/mufln/CLionProjects/tcp-client-server/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/mufln/CLionProjects/tcp-client-server/cmake-build-debug/CMakeFiles/rebuild_cache.dir
