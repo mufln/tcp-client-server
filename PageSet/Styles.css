@@ -19,34 +19,35 @@ body{
     padding: 0;
 }
 
-header{
+.user-info, header, .text-field{
+    display: flex;
+    flex-direction: row;
+}
+
+header, .text-field{
     width: 100%;
     background-color: white;
     position: fixed;
-    top: 0; left: 0;
-    display: flex;
-    flex-direction: row;
+    left: 0;
 }
 
-.user-info{
-    display: flex;
-    flex-direction: row;
-}
+header{top: 0;}
+.text-field{bottom: 0;}
 
-.back-button{
+.back-button, .avatar, .pin, .send{
     height: 50px;
     width: 50px;
     margin: 10px;
     border: none;
+}
+
+.back-button{
     cursor: pointer;
     background: url("back.jpg");
     background-size: contain;
 }
 
 .avatar{
-    height: 50px;
-    width: 50px;
-    margin: 10px;
     border-radius: 50%;
     background-image: url("testav.jpg");
     background-size: cover;
@@ -60,20 +61,7 @@ header{
     font-size: 14px;
 }
 
-.text-field{
-    width: 100%;
-    background-color: white;
-    position: fixed;
-    bottom: 0; left: 0;
-    display: flex;
-    flex-direction: row;
-}
-
 .pin {
-    height: 50px;
-    width: 50px;
-    margin: 10px;
-    
     img {
         height: 30px;
         width: 30px;
@@ -85,11 +73,6 @@ header{
 }
 
 .send {
-    height: 50px;
-    width: 50px;
-    margin: 10px;
-    border-radius: 50%;
-    
     img {
         height: 100%;
         width: 100%;
@@ -98,6 +81,10 @@ header{
     input {
         visibility: hidden;
     }
+}
+
+.send:hover, .pin:hover, .back-button:hover{
+    opacity: 0.5;
 }
 
 textarea{
