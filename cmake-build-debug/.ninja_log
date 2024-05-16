@@ -1,0 +1,4 @@
+# ninja log v5
+9	98	1715884934458817149	build.ninja	c3b8fa577e7f994d
+0	1518	1715880888721170104	CMakeFiles/tcp_client_server.dir/server/main.cpp.o	65ba4ebc6c809bf1
+17	143	1715884742572414248	tcp_client_server	242935fd1c4d9d75

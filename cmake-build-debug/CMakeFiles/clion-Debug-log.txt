@@ -1,1 +1,4 @@
-CMakeLists.txt not found in /Users/mufln/CLionProjects/tcp-client-server Select CMakeLists.txt
+/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/Applications/CLion.app/Contents/bin/ninja/mac/ninja -G Ninja -S /Users/mufln/CLionProjects/tcp-client-server -B /Users/mufln/CLionProjects/tcp-client-server/cmake-build-debug
+-- Configuring done (0.1s)
+-- Generating done (0.0s)
+-- Build files have been written to: /Users/mufln/CLionProjects/tcp-client-server/cmake-build-debug

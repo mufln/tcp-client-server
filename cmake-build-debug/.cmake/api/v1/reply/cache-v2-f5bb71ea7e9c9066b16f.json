@@ -1102,6 +1102,30 @@
 			"value" : "FALSE"
 		},
 		{
+			"name" : "PQXX_LIB",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : "Path to a library."
+				}
+			],
+			"type" : "FILEPATH",
+			"value" : "PQXX_LIB-NOTFOUND"
+		},
+		{
+			"name" : "PQ_LIB",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : "Path to a library."
+				}
+			],
+			"type" : "FILEPATH",
+			"value" : "PQ_LIB-NOTFOUND"
+		},
+		{
 			"name" : "tcp_client_server_BINARY_DIR",
 			"properties" : 
 			[

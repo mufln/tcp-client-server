@@ -8,8 +8,8 @@
 #include "../IDBWorker.h"
 class IDBWorkerAutorization:public IDBWorker {
 public:
-    virtual RegisterUser(string name, string password) = 0;
-    virtual Login(string username, string password);
+    virtual void RegisterUser(string name, string password) = 0;
+    virtual void Login(string username, string password) = 0;
 };
 
 

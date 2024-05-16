@@ -8,8 +8,8 @@
 #include "../IDBWorker.h"
 class IDBMessageWorkerEssential:IDBWorker {
 public:
-    virtual GetMessage() = 0;
-    virtual PostMessage() = 0;
+    virtual void GetMessage() = 0;
+    virtual void PostMessage() = 0;
 
 };
 
