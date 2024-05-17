@@ -17,20 +17,22 @@
       </header>
       <div class="chats">
         <div class="chat">
-          <div class="user-info" id="1">
-            <div  class="avatar"><img src="testav2.png"></div>
-            <div class="text-info">
-              <div class="name">Justsome Snaker</div>
-              <div class="last-mess">Some snake words idk what to text to test my idea</div>
+          <a id="select-chat" href="{{ url_for('static', filename='chat.html') }}">
+            <div class="user-info" id="1">
+              <div  class="avatar"><img src="testav2.png"></div>
+              <div class="text-info">
+                <div class="name">Justsome Snaker</div>
+                <div class="last-mess">Some snake words idk what to text to test my idea</div>
+              </div>
             </div>
-          </div>
+          </a>
         </div>
       </div>  
     </div>
 
 
     <div class="message-column" style="float: right;">
-        <header>
+        <header style="position: sticky;">
           <div class="user-info" id="1">
             <div class="avatar"><img src="testav2.png"></div>  
             <div class="name">Justsome Snaker</div>
@@ -38,9 +40,19 @@
         </header>
 
         <div class="messages">
+          <div class="message">
+            <div class="avatar" style="width: 30px; height: 30px;"><img src="testav2.png"  style="width: 30px; height: 30px;"></div>  
+            <div class="text">
+              <div class="name">Justsome Snaker</div> 
+              <div class="text-and-time">
+                Some text idk what to text lalala lalala
+                <div class="time">20:30</div>
+              </div> 
+            </div>
+          </div> 
         </div>
 
-        <div class="text-field">
+        <footer>
           <div class="pin">
             <label for="docpicker">
               <img src="icon-pin.png">
@@ -51,14 +63,17 @@
               id="docpicker"
               accept=".doc,.docx,.txt,.jpg,.png" />
           </div>
-          <textarea method="POST" rows="1" placeholder="Write a message..."></textarea>
+          <div class="text-field">
+            <textarea method="POST" rows="2" placeholder="Write a message..."></textarea>
+          </div>
           <div class="send">
             <label for="sender">
               <img src="back.jpg">
             </label>
             <input type="submit" id="sender"/>
           </div>
-        </div>
+        </footer>
     </div>
+    <script src="./script.js"></script>
   </body>
 </html>
