@@ -1,0 +1,47 @@
+{% extends 'chats.html' %}
+{% block chat}
+<header>
+    <div class="user-info">
+      <div class="avatar"><img src="{{ chat_user.avatar }}"></div>  
+      <div class="name">{{ chat_user.username }}</div>
+    </div>
+</header>
+
+<div class="messages">
+    {% for message in messages %}
+    <div class="message">
+        <div class="avatar" style="width: 30px; height: 30px;"><img src="{{ message.chat_user.avatar }}"  style="width: 30px; height: 30px;"></div>  
+        <div class="text">
+          <div class="name">{{ message.chat_user.username }}</div> 
+          <div class="text-and-time">
+            {{ message.text }}
+            <div class="time">{{ message.time }}</div>
+          </div> 
+        </div>
+      </div> 
+    {% endfor %}
+</div>
+
+  <form class="footer">
+    <div class="pin">
+      <label for="docpicker">
+        <img src="img/icon-pin.png">
+      </label>
+      <input
+        method="POST"
+        type="file"
+        id="docpicker"
+        accept=".doc,.docx,.txt,.jpg,.png" />
+    </div>
+    <div class="text-field">
+      <textarea method="POST" rows="2" placeholder="Write a message..."></textarea>
+    </div>
+    <div class="send">
+      <label for="sender">
+        <img src="img/back.jpg">
+      </label>
+      <input type="submit" id="sender"/>
+    </div>
+  </form>
+{% endblock %}  
+{% endblock %} 
