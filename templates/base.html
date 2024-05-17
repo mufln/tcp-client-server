@@ -7,6 +7,7 @@
     {% endfor %}
 
     {% if g.user %}
+    <!--Где-то тут надо как-то получить current_user-->
         <head>{% block head %}{% endblock %}</head>
         <body>{% block content %}{% endblock %}</body>
     {% else %}
