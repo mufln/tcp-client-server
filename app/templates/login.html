@@ -19,6 +19,11 @@
         <input type="password" id="password">
         <button id="enter">Войти</button>
       </form>
+      <div class="singin">
+        У Вас ещё нет учётной записи?
+        <a href="{{ url_for('auth.register') }}">Регистрация</a>   
+    </div> 
     </div>
-  </body>
+  </body> 
+    
 </html>

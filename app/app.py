@@ -1,3 +1,5 @@
+import flask
+print(flask.__version__)
 from cfg import *
 from hash import *
 from DBWorker import Worker
@@ -20,7 +22,7 @@ login_manager.login_view = 'login'
 #App view routes
 @app.route("/")
 def index():
-    return render_template("index.html")
+    return render_template("login.html")
 
 
 @app.route('/login')
@@ -32,9 +34,8 @@ def login():
 def login_post():
     username = request.form.get('username').lower()
     password = request.form.get('password')
-    user = User.query.filter_by(username=username).first()
-
-    if not user or not check_password_hash(user.password, password):
+    user = db.isUserExist(username)
+    if not user or not CheckPasswordHash(user.password, password):
         flash('Please check your login details and try again.')
         return redirect(url_for('login'))
     login_user(user)
@@ -52,17 +53,13 @@ def register_post():
     username = request.form.get('username').lower()
     password = request.form.get('password')
 
-    user = User.query.filter_by(username=username).first()
+    user = db.isUserExist(username)
 
     if user:
         flash('Email address already exists')
         return redirect(url_for('register'))
 
-    new_user = User(username=username, password=generate_password_hash(password, method='sha256'), websocket_id=uuid4().hex)
-
-    db.session.add(new_user)
-    db.session.commit()
-
+    db.registerUser(username,GeneratePasswordHash(password))
     return redirect(url_for('login'))
 
 
@@ -76,3 +73,4 @@ def logout():
 @app.route('/messages/', methods=['POST', 'GET'])
 @login_required
 def messages():
+    pass
