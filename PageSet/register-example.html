@@ -13,16 +13,23 @@
         <img src="logo2.png">
         <h1>parceltongue</h1>
       </div>
-      <h2>Авторизация</h2>
+      <h2>Регистрация</h2>
       <form class="login">
+        <div class="pin">
+            <label for="docpicker">
+              <img src="icon-pin.png">
+            </label>
+            <input
+              method="POST"
+              type="file"
+              id="docpicker"
+              accept=".jpg,.png" />
+        </div>
         <input type="text" id="name" placeholder="Логин" required>
         <input type="password" id="password" placeholder="Пароль" required>
-        <button id="enter">Войти</button>
+        <input type="rep-password" id="password" placeholder="Повторите пароль" required>
+        <button id="enter">Зарегистрироваться</button>
       </form>
-      <div class="singin">
-        У Вас ещё нет учётной записи?
-        <a href="{{ url_for('auth.register') }}">Регистрация</a>   
-    </div> 
     </div>
   </body> 
     
