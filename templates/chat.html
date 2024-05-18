@@ -10,14 +10,14 @@
 <div class="messages">
     {% for message in messages %}
     <div class="message">
-        <div class="avatar" style="width: 30px; height: 30px;"><img src="{{ message.chat_user.avatar }}"  style="width: 30px; height: 30px;"></div>  
-        <div class="text">
-          <div class="name">{{ message.chat_user.username }}</div> 
-          <div class="text-and-time">
-            {{ message.text }}
-            <div class="time">{{ message.time }}</div>
-          </div> 
-        </div>
+        <div class="avatar" style="width: 30px; height: 30px;"><img src="{{ message.user.avatar }}"  style="width: 30px; height: 30px;"></div>  
+        <div class="text"> 
+            <div class="name-and-time">
+              <div class="name">{{ message.chat_user.username }}</div>
+              <div class="time">{{ message.time }}</div>
+            </div> 
+              <p style="margin: 10px 0px 0px;">{{ message.text }}</p>
+          </div>
       </div> 
     {% endfor %}
 </div>

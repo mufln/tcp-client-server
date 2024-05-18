@@ -7,6 +7,7 @@
     {% endfor %}
 
     {% if g.user %}
+    <!--Где-то тут надо как-то получить current_user-->
         <head>{% block head %}{% endblock %}</head>
         <body>{% block content %}{% endblock %}</body>
     {% else %}
@@ -23,8 +24,8 @@
                 </div>
                 <h2>Авторизация</h2>
                 <form class="login">
-                    <input method="POST" type="text" id="name" required>
-                    <input method="POST" type="password" id="password" required>
+                    <input method="POST" type="text" id="name" placeholder="Логин" required>
+                    <input method="POST" type="password" id="password"  placeholder="Пароль" required>
                     <input type="submit" id="enter" value="Войти">
                 </form>
                 <div class="singin">
