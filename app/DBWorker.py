@@ -28,11 +28,25 @@ class Worker():
                         ID SERIAL PRIMARY KEY,
                         chatname TEXT,
                         users JSON)""")
+            cur.execute("""
+                        CREATE TABLE IF NOT EXISTS FlaskSessions(
+                        ID INT PRIMARY KEY,
+                        user_id BIGINT,
+                        CONSTRAINT fk_user
+                            FOREIGN KEY(user_id)
+                                REFERENCES Users(ID))""")
             self.base.commit()
             logging.log(logging.INFO,msg="Success")
         except Exception as e:
             logging.log(logging.ERROR,msg=e)
 
+
+    def dropTables(self):
+        logging.log(level=logging.INFO, msg="Trying to drop tables")
+        cur = self.base.cursor()
+        cur.execute("DROP SCHEMA public CASCADE; CREATE SCHEMA public;")
+        self.base.commit()
+        logging.log(level=logging.INFO,msg="Dropped all tables")
 
 
     def makeChat(self, chatid):
@@ -48,13 +62,18 @@ class Worker():
 
 
     def makeCaptions(self, chatid):
-        cur = self.base.cursor()
-        cur.execute(f"""
-                        CREATE TABLE IF NOT EXISTS ChatMedia_{chatid}(
-                        ID SERIAL PRIMARY KEY,
-                        path TEXT,
-                        type INT)""")
-        self.base.commit()
+        try:
+            logging.log(level=logging.INFO,msg=f"Trying to make captions table for chat {chatid}")
+            cur = self.base.cursor()
+            cur.execute(f"""
+                            CREATE TABLE IF NOT EXISTS ChatMedia_{chatid}(
+                            ID SERIAL PRIMARY KEY,
+                            path TEXT,
+                            type INT)""")
+            self.base.commit()
+            logging.log(level=logging.INFO,msg="Success")
+        except Exception as e:
+            logging.log(logging.ERROR,msg=e)
 
 
     def connect(self):
@@ -62,6 +81,7 @@ class Worker():
             logging.log(level=logging.INFO, msg=f"Trying to connect to DB {self.name}")
             base = psycopg2.connect(dbname=self.name, host=self.address, user=self.user, password=self.password, port=self.port)
             logging.log(level=logging.INFO,msg="Connected")
+            logging.log(level=logging.INFO, msg=f"Success")
             return base
         except Exception as e:
             logging.log(level=logging.INFO, msg=f"Trying to connect to DB again, caught {e}")
@@ -69,22 +89,32 @@ class Worker():
 
 
     def close(self):
-        logging.log(level=logging.INFO,msg="Closed DB connection")
-        self.base.close()
+        try:
+            logging.log(level=logging.INFO,msg="Closing DB connection")
+            self.base.close()
+            logging.log(level=logging.INFO, msg="Success")
+        except Exception as e:
+            logging.log(level=logging.ERROR,msg=e)
     #---------------------------------------------------------
 
 
     #----------------------AUTH-------------------------------
     def getPasswordHash(self, username):
-        cur = self.base.cursor()
-        cur.execute("SELECT password FROM Users WHERE username = %s",(username,))
-        return cur.fetchone()[0]
+        try:
+            logging.log(level=logging.INFO,msg=f"Getting password hash for {username}")
+            cur = self.base.cursor()
+            cur.execute("SELECT password FROM Users WHERE username = %s",(username,))
+            password = cur.fetchone()[0]
+            logging.log(level=logging.INFO, msg=f"Successm res = {password}")
+            return password
+        except Exception as e:
+            logging.log(level=logging.ERROR,msg=e)
 
 
     def isUserExist(self, username):
-        cur = self.base.cursor()
-        logging.log(level=logging.INFO, msg=f"Checking user existance for {username}")
         try:
+            logging.log(level=logging.INFO, msg=f"Checking user existance for {username}")
+            cur = self.base.cursor()
             cur.execute("SELECT * FROM Users WHERE username = %s",(username,))
             res = cur.fetchone()
             logging.log(logging.INFO,msg=f"Checked User {username} existance = {res if res else False}")
@@ -94,24 +124,83 @@ class Worker():
 
 
     def registerUser(self, username, password):
-        cur = self.base.cursor()
-        print(username,password)
-        logging.log(logging.INFO, msg=f"Signing up new user with username = {username} and password hash = {password}")
         try:
+            logging.log(logging.INFO, msg=f"Signing up new user with username = {username} and password hash = {password}")
+            cur = self.base.cursor()
             cur.execute("INSERT INTO Users (username, password, profile_pic_path) VALUES (%s, %s, %s)",(username,password,DEFAULT_PROFILE_PIC_PATH))
             self.base.commit()
             logging.log(logging.INFO,msg=f"Registered new user {username}")
         except Exception as e:
             logging.log(logging.ERROR,msg=e)
+
+
+    # def addSession(self,username,session_id):
+    #     try:
+    #         cur = self.base.cursor()
+    #         cur.execute("SELECT ID FROM Users WHERE username=%s",(username,))
+    #         user_id = cur.fetchone()[0]
+    #         cur.execute("INSERT INTO FlaskSessions (ID,user_id) VALUES (%s,%s)",(session_id,user_id))
+    #     except Exception as e:
+    #         logging.log(level=logging.ERROR, msg=e)
+
+
+    # def getSessions(self,username):
+    #     try:
+    #         logging.log(level=logging.INFO,msg=f"Trying to get sessions for {username}")
+    #         cur = self.base.cursor()
+    #         cur.execute("SELECT ID FROM Users WHERE username = %s",(username,))
+    #         user_id = cur.fetchone()[0]
+    #         cur.execute("SELECT ID FROM Flask_Sessions WHERE user_id",(user_id,))
+    #         sessions = cur.fetchall()
+    #         # print(sessions)
+    #         logging.log(level=logging.INFO,msg=f"Got {sessions}")
+    #     except Exception as e:
+    #         logging.log(level=logging.ERROR, msg=e)
+
+
+    # def getUserIDBySessionID(self,session_id):
+    #     try:
+    #         logging.log(level=logging.INFO,msg=f"trying to get user_id for session {session_id}")
+    #         cur = self.base.cursor()
+    #         cur.execute("SELECT user_id FROM FlaskSessions WHERE session_id = %s", (session_id,))
+    #         user_id = cur.fetchone()[0]
+    #         logging.log(level=logging.INFO, msg=f"trying to get user_id for session {user_id}")
+    #         return user_id
+    #     except Exception as e:
+    #         logging.log(level=logging.ERROR, msg=e)
+
+
+    def getUserbyID(self,id):
+        try:
+            logging.log(level=logging.INFO, msg=f"trying to get user by id {id}")
+            cur = self.base.cursor()
+            cur.execute("SELECT * FROM Users WHERE ID = %s", (id,))
+            user = cur.fetchone()
+            logging.log(level=logging.INFO, msg=f"Got user {user}")
+            return user
+        except Exception as e:
+            logging.log(level=logging.ERROR, msg=e)
+
+
+    def getUserbyUsername(self, username):
+        try:
+            logging.log(level=logging.INFO, msg=f"trying to get user by username {username}")
+            cur = self.base.cursor()
+            cur.execute("SELECT * FROM Users WHERE username = %s", (username,))
+            user = cur.fetchone()
+            logging.log(level=logging.INFO, msg=f"Got user {user}")
+            return user
+        except Exception as e:
+            logging.log(level=logging.ERROR, msg=e)
     # ---------------------------------------------------------
 
 
     # --------------------MESSAGE------------------------------
-    def handleMessagePost(self, ):
+    def handleMessagePost(self):
         pass
 
 
-    def handleMessageGet(self, request):
+    def handleMessageGet(self):
         pass
 
     # ---------------------------------------------------------
@@ -123,6 +212,7 @@ class Worker():
         cur = self.base.cursor()
         cur.execute("SELECT path FROM Storage WHERE name = %s", (name,))
         res = cur.fetchone()
+
 
 if __name__=="__main__":
     import hash
@@ -153,5 +243,7 @@ if __name__=="__main__":
                 print("Logged in")
             else:
                 print("Worng password")
+        elif action=="drop":
+            db.dropTables()
         elif action=="":
             pass
