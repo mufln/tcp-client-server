@@ -1,29 +1,28 @@
-<!DOCTYPE html>
-
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>parceltongue</title>
-    <link rel="stylesheet" href="login-styles.css">
-  </head>
-
-  <body>
-    <div class="app">
-      <div class="logo">
-        <img src="logo2.png">
+{% extends 'base.html' %}
+{%block head%}
+<title>parceltongue</title>
+<link rel="stylesheet" href="{{url_for('static',filename='base-styles.css')}}">
+{% endblock %}
+{% block content %}
+<div class="app">
+    <div class="logo">
+            <img src="{{url_for('static',filename='logo2.png')}}">
         <h1>parceltongue</h1>
-      </div>
-      <h2>Авторизация</h2>
-      <form class="login">
-        <input type="text" id="name">
-        <input type="password" id="password">
-        <button id="enter">Войти</button>
-      </form>
-      <div class="singin">
-        У Вас ещё нет учётной записи?
-        <a href="{{ url_for('auth.register') }}">Регистрация</a>   
-    </div> 
     </div>
-  </body> 
-    
-</html>
+    <h2>Авторизация</h2>
+        {% with messages = get_flashed_messages() %}
+        {%if messages%}
+        {% for message in messages %}
+        <div class="flash">{{ message }}</div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+    <form class="login" method="post">
+        {{form.hidden_tag()}}
+        <input type="text" id="name" name="username" required>
+        <input type="password" id="password" name="password" required>
+        <input type="submit" id="enter" name="submit" value="Войти">
+    </form>
+    <div class="singin"> У Вас ещё нет учётной записи? <a href="{{ url_for('register') }}">Регистрация</a></div>
+</div>
+{% endblock %}

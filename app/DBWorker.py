@@ -117,6 +117,13 @@ class Worker():
     # ---------------------------------------------------------
 
 
+    #-------------------------MEDIA------------------------
+    def getMedia(self, name):
+        logging.log(level=logging.INFO, msg=f"Getting {name} from DB")
+        cur = self.base.cursor()
+        cur.execute("SELECT path FROM Storage WHERE name = %s", (name,))
+        res = cur.fetchone()
+
 if __name__=="__main__":
     import hash
     from cfg import *

@@ -76,3 +76,7 @@ h2{
     color: white;
 }
 
+#enter:hover{
+    cursor: pointer;
+    opacity: 0.5;
+}
