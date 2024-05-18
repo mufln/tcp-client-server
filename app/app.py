@@ -37,6 +37,7 @@ def index():
     return render_template("base.html")
 
 
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     logging.log(level=logging.INFO,msg=f"Logging in {current_user}")
@@ -47,7 +48,7 @@ def login():
         username = request.form.get("username")
         password = request.form.get("password")
         db_user = db.getUserbyUsername(username)
-        if db_user and CheckPasswordHash(db_user[3],password):
+        if db_user and CheckPasswordHash(db_user['password'],password):
             user = UserMixin()
             user.__setattr__("id",db_user[0])
             login_user(user)
@@ -85,7 +86,15 @@ def logout():
 @app.route('/chats/', methods=['POST', 'GET'])
 @login_required
 def messages():
-    return render_template("chats.html",users=[],self=[])
+    users = [
+        {
+            'username':"snake",
+            'profile_pic_path':f"{'testav2.png'}",
+            'messages': ['shshhshshs', 'shhsshhshhshsh'],
+        }
+    ]
+    thisuser = db.getUserbyID(current_user.get_id())
+    return render_template("chats.html",users=users,thisuser=thisuser)
 
 
 if __name__ == "__main__":
