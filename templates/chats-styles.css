@@ -80,6 +80,10 @@ header {top: 0;}
     overflow: hidden;
 }
 
+.messages{
+    overflow: auto;
+}
+
 .pin {
     border-radius: 50%;
     height: 30px;
