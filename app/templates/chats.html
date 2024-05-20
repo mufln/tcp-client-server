@@ -24,11 +24,11 @@
           <a id="select-chat" href="">
             <!--эээ надо понять, как получить id чата, я не понимаю-->
           <div class="user-info">
-            <div  class="avatar"><img src="{{ url_for('static',filename=user['profile_pic_path']) }}"></div>
+            <div  class="avatar"><img src="{{ url_for('static',filename=user['chat_pic_path']) }}"></div>
             <div class="text-info">
-              <div class="name">{{ user["username"] }}</div>
+              <div class="name">{{ user["chatname"] }}</div>
               <!--user.username - это имя пользователя, с которым был диалог-->
-              <div class="last-mess">{{ user["messages"][0] }}</div>
+              <div class="last-mess">{{ user["last_message"] }}</div>
               <!--user.messages[0].text - предполагается, что для каждого user есть массив сообщений (допустим, текст+автор)-->
               <!--, где последнее соо лежит в конце... и из сообщения мне здесь нужен только его текст-->
             </div>

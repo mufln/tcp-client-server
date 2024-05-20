@@ -86,15 +86,18 @@ def logout():
 @app.route('/chats/', methods=['POST', 'GET'])
 @login_required
 def messages():
-    users = [
-        {
-            'username':"snake",
-            'profile_pic_path':f"{'testav2.png'}",
-            'messages': ['shshhshshs', 'shhsshhshhshsh'],
-        }
-    ]
+    # users = [
+    #     {
+    #         'username':"snake",
+    #         'profile_pic_path':f"{'testav2.png'}",
+    #         'messages': ['shshhshshs', 'shhsshhshhshsh'],
+    #     }
+    # ]
+
+    chats = db.getUserChats(id = current_user.get_id())
+    logging.log(logging.INFO,f'got chats {chats}')
     thisuser = db.getUserbyID(current_user.get_id())
-    return render_template("chats.html",users=users,thisuser=thisuser)
+    return render_template("chats.html",users=chats,thisuser=thisuser)
 
 
 if __name__ == "__main__":

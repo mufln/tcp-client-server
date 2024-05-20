@@ -30,14 +30,17 @@ class Worker():
                         CREATE TABLE IF NOT EXISTS Chats(
                         ID SERIAL PRIMARY KEY,
                         chatname TEXT,
-                        users JSON)""")
-            cur.execute("""
-                        CREATE TABLE IF NOT EXISTS FlaskSessions(
-                        ID INT PRIMARY KEY,
-                        user_id BIGINT,
-                        CONSTRAINT fk_user
-                            FOREIGN KEY(user_id)
-                                REFERENCES Users(ID))""")
+                        chat_pic_path TEXT,
+                        tags JSON,
+                        users JSON,
+                        is_direct BOOLEAN)""")
+            # cur.execute("""
+            #             CREATE TABLE IF NOT EXISTS FlaskSessions(
+            #             ID INT PRIMARY KEY,
+            #             user_id BIGINT,
+            #             CONSTRAINT fk_user
+            #                 FOREIGN KEY(user_id)
+            #                     REFERENCES Users(ID))""")
             self.base.commit()
             cur.close()
             logging.log(logging.INFO,msg="Success")
@@ -46,37 +49,43 @@ class Worker():
 
 
     def dropTables(self):
-        logging.log(level=logging.INFO, msg="Trying to drop tables")
-        cur = self.base.cursor(cursor_factory=psycopg2.extras.DictCursor)
-        cur.execute("DROP SCHEMA public CASCADE; CREATE SCHEMA public;")
-        self.base.commit()
-        cur.close()
-        logging.log(level=logging.INFO,msg="Dropped all tables")
+        try:
+            logging.log(level=logging.INFO, msg="Trying to drop tables")
+            cur = self.base.cursor(cursor_factory=psycopg2.extras.DictCursor)
+            cur.execute("DROP SCHEMA public CASCADE; CREATE SCHEMA public;")
+            self.base.commit()
+            cur.close()
+            logging.log(level=logging.INFO,msg="Dropped all tables")
+        except Exception as e:
+            logging.log(logging.ERROR,msg=e)
 
 
-    def makeChat(self, chatid):
-        cur = self.base.cursor(cursor_factory=psycopg2.extras.DictCursor)
-        cur.execute(f"""
-                    CREATE TABLE IF NOT EXISTS Chat_{chatid}(
-                    ID SERIAL PRIMARY KEY,
-                    from_user BIGINT,
-                    message_text TEXT,
-                    send_date DATE,
-                    captions JSON)""")
-        self.base.commit()
+    def makeChat(self, chatid, cur):
+        try:
+            chatTableName = f"Chat_{chatid}"
+            cur.execute(f"""
+                        CREATE TABLE IF NOT EXISTS """+ chatTableName +"""(
+                        ID SERIAL PRIMARY KEY,
+                        from_user BIGINT,
+                        message_text TEXT,
+                        send_date DATE,
+                        captions JSON)""")
+            self.base.commit()
+            logging.log(level=logging.INFO, msg=f"Made table Chats_{chatid}")
+        except Exception as e:
+            logging.log(logging.ERROR, msg=e)
 
 
-    def makeCaptions(self, chatid):
+    def makeCaptions(self, chatid,cur):
         try:
             logging.log(level=logging.INFO,msg=f"Trying to make captions table for chat {chatid}")
-            cur = self.base.cursor(cursor_factory=psycopg2.extras.DictCursor)
+            chatTable = f"ChatMedia_{chatid}"
             cur.execute(f"""
-                            CREATE TABLE IF NOT EXISTS ChatMedia_{chatid}(
+                            CREATE TABLE IF NOT EXISTS """+chatTable+"""(
                             ID SERIAL PRIMARY KEY,
                             path TEXT,
                             type INT)""")
             self.base.commit()
-            cur.close()
             logging.log(level=logging.INFO,msg="Success")
         except Exception as e:
             logging.log(logging.ERROR,msg=e)
@@ -135,7 +144,7 @@ class Worker():
         try:
             logging.log(logging.INFO, msg=f"Signing up new user with username = {username} and password hash = {password}")
             cur = self.base.cursor(cursor_factory=psycopg2.extras.DictCursor)
-            cur.execute("INSERT INTO Users (username, password, profile_pic_path) VALUES (%s, %s, %s)",(username,password,DEFAULT_PROFILE_PIC_PATH))
+            cur.execute("INSERT INTO Users (username, password, profile_pic_path, chats) VALUES (%s, %s, %s, %s)",(username,password,DEFAULT_PROFILE_PIC_PATH,json.dumps([])))
             self.base.commit()
             cur.close()
             logging.log(logging.INFO,msg=f"Registered new user {username}")
@@ -223,15 +232,82 @@ class Worker():
 
 
     # -------------------CHATS--------------------------------
+    def addChat(self,user_ids, is_direct, name = None ):
+        try:
+            logging.log(level=logging.INFO,msg=f"Trying to make chat for {user_ids}, is_direct = {is_direct}, chat_name = {name}")
+            cur = self.base.cursor(cursor_factory=psycopg2.extras.DictCursor)
+            if name:
+                cur.execute("INSERT INTO Chats (chatname, chat_pic_path, users, is_direct) VALUES (%s,%s,%s,%s) RETURNING ID",(name,'logo2.png',json.dumps(user_ids),is_direct))
+            else:
+                cur.execute("INSERT INTO Chats (users,, chat_pic_path, is_direct) VALUES (%s,%s,%s) RETURNING ID", (json.dumps(user_ids),'logo2.png',is_direct))
+            chat_id = cur.fetchone()[0]
+            logging.log(level=logging.INFO,msg=f"Added to Chats chat with id {chat_id}")
+            self.base.commit()
+            self.makeChat(chat_id, cur)
+            self.makeCaptions(chat_id,cur)
+            for user_id in user_ids:
+                cur.execute("SELECT chats FROM Users WHERE id=%s", (user_id,))
+                chats = json.dumps(cur.fetchone()['chats'] + [chat_id])
+                cur.execute("UPDATE Users SET chats=%s WHERE ID=%s", (chats, user_id))
+            self.base.commit()
+            cur.close()
+            logging.log(level=logging.INFO,msg="Success")
+        except Exception as e:
+            logging.log(level=logging.ERROR, msg=e)
+
+
+    def delChat(self, chat_id):
+        try:
+            logging.log(level=logging.INFO,msg=f"Trying to delete chat {chat_id}")
+            cur = self.base.cursor()
+            chatTable = f"Chat_{chat_id}"
+            chatMediaTable = f"ChatMedia_{chat_id}"
+            cur.execute("DROP TABLE "+chatTable)
+            cur.execute("DROP TABLE "+chatMediaTable)
+            cur.execute("DELETE FROM chats WHERE ID=%s RETURNING users",(chat_id,))
+            users = cur.fetchone()[0]
+            for user in users:
+                cur.execute("SELECT chats FROM Users WHERE ID=%s",(user,))
+                chats = cur.fetchone()[0]
+                print(chats)
+                chats.remove(chat_id)
+                cur.execute("UPDATE Users SET chats = %s WHERE ID=%s",(json.dumps(chats),user))
+            self.base.commit()
+            cur.close()
+            logging.log(level=logging.INFO,msg="Success")
+        except Exception as e:
+            logging.log(level=logging.ERROR, msg=e)
+
+
     def getUserChats(self, id=None,username=None):
         try:
+            logging.log(level=logging.INFO,msg=f"Trying to get chats for user {id} {username}")
             cur = self.base.cursor(cursor_factory=psycopg2.extras.DictCursor)
             if id:
-                cur.execute("SELECT chats FROM Users WHERE ID = %s",(id,))
+                cur.execute("SELECT * FROM Users WHERE ID = %s",(id,))
             else:
-                cur.execute("SELECT chats FROM Users WHERE username = %s", (username,))
-            chats = json.loads(cur.fetchone()[0])
-
+                cur.execute("SELECT * FROM Users WHERE username = %s", (username,))
+            user = dict(cur.fetchone())
+            chat_ids = user['chats']
+            chats = []
+            for i in chat_ids:
+                inst = {}
+                cur.execute("SELECT * FROM Chats WHERE ID = %s",(i,))
+                chat = cur.fetchone()
+                if chat['is_direct']:
+                    users = chat['users']
+                    users.remove(user['id'])
+                    to_user_id = users[0]
+                    to_user = self.getUserbyID(to_user_id)
+                    inst.__setitem__('chat_pic_path',to_user['profile_pic_path'])
+                    inst.__setitem__('chatname',to_user['username'])
+                    inst.__setitem__('last_message','sample_message_direct')
+                else:
+                    inst.__setitem__('chat_pic_path',chat['chat_pic_path'])
+                    inst.__setitem__('chatname', chat['chatname'])
+                    inst.__setitem__('last_message','sample_message_group')
+                chats.append(inst)
+            return chats
         except Exception as e:
             logging.log(level=logging.ERROR, msg=e)
 
@@ -241,18 +317,24 @@ class Worker():
         pass
 
 
-    def handleMessageGet(self):
-        pass
+    def handleMessageGet(self, chat_id):
+        try:
+            cur = self.base.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        except Exception as e:
+            logging.log(level=logging.ERROR, msg=e)
 
     # ---------------------------------------------------------
 
 
     #-------------------------MEDIA------------------------
     def getMedia(self, name):
-        logging.log(level=logging.INFO, msg=f"Getting {name} from DB")
-        cur = self.base.cursor(cursor_factory=psycopg2.extras.DictCursor)
-        cur.execute("SELECT path FROM Storage WHERE name = %s", (name,))
-        res = cur.fetchone()
+        try:
+            logging.log(level=logging.INFO, msg=f"Getting {name} from DB")
+            cur = self.base.cursor(cursor_factory=psycopg2.extras.DictCursor)
+            cur.execute("SELECT path FROM Storage WHERE name = %s", (name,))
+            res = cur.fetchone()
+        except Exception as e:
+            logging.log(logging.ERROR,msg=e)
 
 
 if __name__=="__main__":
@@ -295,6 +377,18 @@ if __name__=="__main__":
             name = input("username: ")
             print(db.getUserChats(username=name))
         elif action == "addchat":
-            pass
-        elif action=="":
+            user_ids = [int(i) for i in input("enter user_ids separate by space ").split()]
+            name = input("Enter name or nothing ")
+            is_direct = bool(int(input("Is chat direct? 0/1 ")))
+            db.addChat(user_ids,is_direct,name if name!="" else None)
+        elif action == "delchat":
+            id = int(input("enter id "))
+            db.delChat(id)
+        elif action == "listchats":
+            cur = db.base.cursor()
+            cur.execute("SELECT * FROM Chats")
+            res = cur.fetchall()
+            for i in res:
+                print(i)
+        elif action=="send message":
             pass
