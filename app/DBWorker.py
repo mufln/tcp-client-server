@@ -1,5 +1,6 @@
+import datetime
 import json
-
+import datetime
 import psycopg2
 import psycopg2.extras
 import logging
@@ -70,6 +71,7 @@ class Worker():
                         message_text TEXT,
                         send_date DATE,
                         captions JSON)""")
+            cur.execute("INSERT INTO "+ chatTableName +" (from_user, message_text, send_date) VALUES (%s,%s,%s)",(1,"say hello!",datetime.datetime.ctime()))
             self.base.commit()
             logging.log(level=logging.INFO, msg=f"Made table Chats_{chatid}")
         except Exception as e:
@@ -239,8 +241,8 @@ class Worker():
             if name:
                 cur.execute("INSERT INTO Chats (chatname, chat_pic_path, users, is_direct) VALUES (%s,%s,%s,%s) RETURNING ID",(name,'logo2.png',json.dumps(user_ids),is_direct))
             else:
-                cur.execute("INSERT INTO Chats (users,, chat_pic_path, is_direct) VALUES (%s,%s,%s) RETURNING ID", (json.dumps(user_ids),'logo2.png',is_direct))
-            chat_id = cur.fetchone()[0]
+                cur.execute("INSERT INTO Chats (users, chat_pic_path, is_direct) VALUES (%s,%s,%s) RETURNING ID", (json.dumps(user_ids),'logo2.png',is_direct))
+            chat_id = cur.fetchone()['id']
             logging.log(level=logging.INFO,msg=f"Added to Chats chat with id {chat_id}")
             self.base.commit()
             self.makeChat(chat_id, cur)
@@ -269,7 +271,6 @@ class Worker():
             for user in users:
                 cur.execute("SELECT chats FROM Users WHERE ID=%s",(user,))
                 chats = cur.fetchone()[0]
-                print(chats)
                 chats.remove(chat_id)
                 cur.execute("UPDATE Users SET chats = %s WHERE ID=%s",(json.dumps(chats),user))
             self.base.commit()
@@ -278,6 +279,16 @@ class Worker():
         except Exception as e:
             logging.log(level=logging.ERROR, msg=e)
 
+    def getChatById(self,chat_id):
+        try:
+            logging.log(level=logging.INFO,msg=f"Trying to get info about chat {chat_id}")
+            cur = self.base.cursor(cursor_factory=psycopg2.extras.DictCursor)
+            cur.execute("SELECT * FROM Chats WHERE ID= %s",(chat_id,))
+            chat = dict(cur.fetchone())
+            cur.close()
+            return chat
+        except Exception as e:
+            logging.log(level=logging.ERROR, msg=e)
 
     def getUserChats(self, id=None,username=None):
         try:
@@ -291,7 +302,7 @@ class Worker():
             chat_ids = user['chats']
             chats = []
             for i in chat_ids:
-                inst = {}
+                inst = {"id":i}
                 cur.execute("SELECT * FROM Chats WHERE ID = %s",(i,))
                 chat = cur.fetchone()
                 if chat['is_direct']:
@@ -307,19 +318,37 @@ class Worker():
                     inst.__setitem__('chatname', chat['chatname'])
                     inst.__setitem__('last_message','sample_message_group')
                 chats.append(inst)
+            cur.close()
             return chats
         except Exception as e:
             logging.log(level=logging.ERROR, msg=e)
 
 
     # --------------------MESSAGE------------------------------
-    def handleMessagePost(self):
+    def handleMessagePost(self, chat_id, from_user, message_text = None, captions = None):
+        try:
+            logging.log(level=logging.INFO,msg=f'trying to post msg to chat {chat_id} from user {from_user}')
+            cur = self.base.cursor()
+            cur.execute("INSERT INTO Chat_"+chat_id+" (from_user, message_text, send_date, captions) VALUES (%s,%s,%s,%s)",(from_user,message_text,datetime.datetime.now(),captions))
+            self.base.commit()
+            cur.close()
+        except Exception as e:
+            logging.log(level=logging.ERROR, msg=e)
         pass
 
 
     def handleMessageGet(self, chat_id):
         try:
+            logging.log(level=logging.INFO,msg=f'Getting messages from chat {chat_id}')
             cur = self.base.cursor(cursor_factory=psycopg2.extras.DictCursor)
+            cur.execute("SELECT * FROM Chat_"+chat_id+ " ORDER BY ID DESC LIMIT 100")
+            messages = [dict(i) for i in cur.fetchall()]
+            for message in messages:
+                message.__setitem__('from_user', self.getUserbyID(message['from_user']))
+                message.__setitem__("send_date",message['send_date'].strftime("%m/%d/%Y, %H:%M:%S"))
+            logging.log(level=logging.INFO, msg=f'Success')
+            cur.close()
+            return messages
         except Exception as e:
             logging.log(level=logging.ERROR, msg=e)
 
@@ -333,6 +362,7 @@ class Worker():
             cur = self.base.cursor(cursor_factory=psycopg2.extras.DictCursor)
             cur.execute("SELECT path FROM Storage WHERE name = %s", (name,))
             res = cur.fetchone()
+            cur.close()
         except Exception as e:
             logging.log(logging.ERROR,msg=e)
 

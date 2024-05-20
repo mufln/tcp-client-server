@@ -21,7 +21,7 @@
         {% for user in users %}
         <!--users - список пользователей, с которыми мы вообще общались-->
         <div class="chat">
-          <a id="select-chat" href="">
+          <a id="select-chat" href="{{user['id']}}">
             <!--эээ надо понять, как получить id чата, я не понимаю-->
           <div class="user-info">
             <div  class="avatar"><img src="{{ url_for('static',filename=user['chat_pic_path']) }}"></div>

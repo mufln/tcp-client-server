@@ -56,7 +56,7 @@ header, .footer{
 
 header {top: 0;}
 .footer {
-    max-height: 150px; 
+    height: 150px;
     bottom: 0;
 
 }
@@ -150,6 +150,17 @@ a {
 }
 a:link, a:visited {
     text-decoration: none;
+}
+
+.messages {
+      overflow-y: scroll;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+}
+
+.messages::-webkit-scrollbar {
+      width: 0;
+      height: 0;
 }
 
 .message{

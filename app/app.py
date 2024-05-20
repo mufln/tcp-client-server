@@ -37,7 +37,6 @@ def index():
     return render_template("base.html")
 
 
-
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     logging.log(level=logging.INFO,msg=f"Logging in {current_user}")
@@ -85,19 +84,27 @@ def logout():
 
 @app.route('/chats/', methods=['POST', 'GET'])
 @login_required
-def messages():
-    # users = [
-    #     {
-    #         'username':"snake",
-    #         'profile_pic_path':f"{'testav2.png'}",
-    #         'messages': ['shshhshshs', 'shhsshhshhshsh'],
-    #     }
-    # ]
-
+def chats():
+    logging.log(logging.INFO,msg=f'Got request for listing main page from user {current_user.get_id()}')
     chats = db.getUserChats(id = current_user.get_id())
     logging.log(logging.INFO,f'got chats {chats}')
     thisuser = db.getUserbyID(current_user.get_id())
     return render_template("chats.html",users=chats,thisuser=thisuser)
+
+
+@app.route('/chats/<chat_id>', methods=['POST', 'GET'])
+@login_required
+def messages(chat_id):
+    print(chat_id)
+    text = request.form.get('message_text')
+    print(text)
+    if text:
+        db.handleMessagePost(chat_id,current_user.get_id(),text)
+    thisuser = db.getUserbyID(current_user.get_id())
+    chats = db.getUserChats(id=current_user.get_id())
+    chat = [i for i in chats if i['id']==int(chat_id)][0]
+    messages = db.handleMessageGet(chat_id)[::-1]
+    return render_template("chat.html", messages = messages, users=chats, thisuser=thisuser, chat = chat)
 
 
 if __name__ == "__main__":
