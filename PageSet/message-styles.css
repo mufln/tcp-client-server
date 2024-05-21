@@ -32,6 +32,7 @@ body, .user-info, header, footer{
     flex-direction: column;
     width: 100%;
     height: 100%;
+    overflow: hidden;
 }
 
 .chats-column{
@@ -39,22 +40,9 @@ body, .user-info, header, footer{
 }
 
 .chats{
+    overflow: auto;
     padding: 10px;
 }
-
-.new-chat-button{
-    position: fixed;
-    margin: 10px;
-    bottom: 0;
-
-    width: 50px;
-    height: 50px;
-    img{
-        width: 50px;
-        height: 50px;
-    }
-}
-
 .text-info{
     overflow: hidden;
     width: 100%;
@@ -64,15 +52,15 @@ header, footer{
     display: flex;
     flex-direction: row;
     width: 100%;
+    height: max-content;
     background-color: white;
-    position: absolute;
+    position: relative;
 }
 
 header {top: 0;}
 footer {
     max-height: 150px; 
     bottom: 0;
-
 }
 
 .avatar, .send{
@@ -94,6 +82,11 @@ footer {
     overflow: hidden;
 }
 
+.messages{
+    flex: 1;
+    overflow: auto;
+}
+
 .pin {
     border-radius: 50%;
     height: 30px;
@@ -112,7 +105,7 @@ footer {
     border-radius: 50%;
     height: 50px;
     width: 50px;
-   
+    margin: 10px;
     img {
         transform: scale(-1, 1);
     }
@@ -134,7 +127,6 @@ footer {
 
 .text-field{
     max-height: 150px;
-    height: max-content;
     flex: 1;
     display: flex;
     align-items: flex-end;
@@ -175,6 +167,21 @@ a:link, a:visited {
     padding: 10px;
 }
 
+.new-chat-button{
+    background-color: white;
+    border-radius: 50%;
+    position: fixed;
+    left: 10px;
+    bottom: 0;
+
+    width: max-content;
+    height: max-content;
+    img{
+        width: 50px;
+        height: 50px;
+    }
+}
+
 .text{
     background-color: white;
     padding: 10px;
@@ -182,6 +189,11 @@ a:link, a:visited {
     max-width: 50%;
     width: max-content;
     display: flex;
+    white-space: pre-wrap;      /* CSS3 */   
+    white-space: -moz-pre-wrap; /* Firefox */    
+    white-space: -pre-wrap;     /* Opera <7 */   
+    white-space: -o-pre-wrap;   /* Opera 7 */    
+    word-wrap: break-word;     
     flex-direction: column;
     .name, .time{
         font-size: small;
