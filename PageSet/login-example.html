@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>parceltongue</title>
+    <link rel="stylesheet" href="login-styles.css">
+  </head>
+
+  <body>
+    <div class="app">
+      <div class="logo">
+        <img src="logo2.png">
+        <h1>parceltongue</h1>
+      </div>
+      <h2>Авторизация</h2>
+      <form class="login">
+        <input type="text" id="name" placeholder="Логин" required>
+        <input type="password" id="password" placeholder="Пароль" required>
+        <button id="enter">Войти</button>
+      </form>
+      <div class="singin">
+        У Вас ещё нет учётной записи?
+        <a href="{{ url_for('auth.register') }}">Регистрация</a>   
+    </div> 
+    </div>
+  </body> 
+    
+</html>
