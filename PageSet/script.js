@@ -1,6 +1,6 @@
 var tx = document.getElementsByTagName('textarea');
 for (var i = 0; i < tx.length; i++) {
-  tx[i].setAttribute('style', 'height:' + (tx[i].scrollHeight) + 'px;overflow-y:auto;');
+  tx[i].setAttribute('style', 'height:' + (tx[i].scrollHeight) + 'px;overflow:auto;');
   tx[i].addEventListener("input", OnInput, false);
 }
 
