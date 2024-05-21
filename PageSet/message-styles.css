@@ -20,7 +20,7 @@ body, html{
     overflow: hidden;
 }
 
-body, .user-info, header, .footer{
+body, .user-info, header, footer{
     display: flex;
     align-items: center;
     flex-direction: row;
@@ -48,7 +48,7 @@ body, .user-info, header, .footer{
     width: 100%;
 }
 
-header, .footer{
+header, footer{
     display: flex;
     flex-direction: row;
     width: 100%;
@@ -58,7 +58,7 @@ header, .footer{
 }
 
 header {top: 0;}
-.footer {
+footer {
     max-height: 150px; 
     bottom: 0;
 
@@ -169,6 +169,8 @@ a:link, a:visited {
 }
 
 .new-chat-button{
+    background-color: white;
+    border-radius: 50%;
     position: fixed;
     left: 10px;
     bottom: 0;

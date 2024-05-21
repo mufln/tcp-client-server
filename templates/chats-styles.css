@@ -169,6 +169,8 @@ a:link, a:visited {
 }
 
 .new-chat-button{
+    background-color: white;
+    border-radius: 50%;
     position: fixed;
     left: 10px;
     bottom: 0;
