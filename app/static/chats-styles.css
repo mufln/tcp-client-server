@@ -32,6 +32,7 @@ body, .user-info, header, .footer{
     flex-direction: column;
     width: 100%;
     height: 100%;
+    overflow: hidden;
 }
 
 .chats-column{
@@ -39,6 +40,7 @@ body, .user-info, header, .footer{
 }
 
 .chats{
+    overflow: auto;
     padding: 10px;
 }
 .text-info{
@@ -50,15 +52,15 @@ header, .footer{
     display: flex;
     flex-direction: row;
     width: 100%;
+    height: max-content;
     background-color: white;
-    position: absolute;
+    position: relative;
 }
 
 header {top: 0;}
 .footer {
-    height: 150px;
+    max-height: 150px; 
     bottom: 0;
-
 }
 
 .avatar, .send{
@@ -78,6 +80,11 @@ header {top: 0;}
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
+}
+
+.messages{
+    flex: 1;
+    overflow: auto;
 }
 
 .pin {
@@ -152,23 +159,27 @@ a:link, a:visited {
     text-decoration: none;
 }
 
-.messages {
-      overflow-y: scroll;
-      -ms-overflow-style: none;
-      scrollbar-width: none;
-}
-
-.messages::-webkit-scrollbar {
-      width: 0;
-      height: 0;
-}
-
 .message{
     display: flex;
     flex-direction: row;
     align-content: center;
     justify-items: center;
     padding: 10px;
+}
+
+.new-chat-button{
+    background-color: white;
+    border-radius: 50%;
+    position: fixed;
+    left: 10px;
+    bottom: 0;
+
+    width: max-content;
+    height: max-content;
+    img{
+        width: 50px;
+        height: 50px;
+    }
 }
 
 .text{
@@ -178,20 +189,18 @@ a:link, a:visited {
     max-width: 50%;
     width: max-content;
     display: flex;
+    white-space: pre-wrap;      /* CSS3 */   
+    white-space: -moz-pre-wrap; /* Firefox */    
+    white-space: -pre-wrap;     /* Opera <7 */   
+    white-space: -o-pre-wrap;   /* Opera 7 */    
+    word-wrap: break-word;     
     flex-direction: column;
     .name, .time{
         font-size: small;
     }
-    .text-and-time{
-        margin: 5px;
+    .name-and-time{
         display: flex;
-    }
-    .name{
-        align-self: flex-start;
-    }
-    .time{
-        padding-left: 5px;
-        align-self: flex-end;
+        justify-content: space-between;
     }
 
 }

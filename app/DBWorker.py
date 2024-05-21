@@ -345,7 +345,7 @@ class Worker():
             messages = [dict(i) for i in cur.fetchall()]
             for message in messages:
                 message.__setitem__('from_user', self.getUserbyID(message['from_user']))
-                message.__setitem__("send_date",message['send_date'].strftime("%m/%d/%Y, %H:%M:%S"))
+                message.__setitem__("send_date",message['send_date'].strftime("%H:%M"))
             logging.log(level=logging.INFO, msg=f'Success')
             cur.close()
             return messages

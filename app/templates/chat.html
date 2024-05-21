@@ -1,11 +1,11 @@
 {% extends 'chats.html' %}
 {% block chat %}
-<div>
+<header>
     <div class="user-info">
       <div class="avatar"><img src="{{url_for('static',filename=chat['chat_pic_path'])}}"></div>
       <div class="name">{{chat['chatname']}}</div>
     </div>
-</div>
+</header>
 <div class="messages">
     {% for message in messages %}
     <div class="message">
@@ -20,7 +20,6 @@
       </div> 
     {% endfor %}
 </div>
-<div >
   <form class="footer"  method="POST" href="">
     <div class="pin">
       <label for="docpicker">
@@ -42,5 +41,4 @@
       <input type="submit" id="sender" name="sender"/>
     </div>
   </form>
-</div>
 {% endblock %}
