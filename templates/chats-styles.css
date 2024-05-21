@@ -50,6 +50,7 @@ header, .footer{
     display: flex;
     flex-direction: row;
     width: 100%;
+    height: max-content;
     background-color: white;
     position: absolute;
 }
