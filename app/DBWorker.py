@@ -69,9 +69,9 @@ class Worker():
                         ID SERIAL PRIMARY KEY,
                         from_user BIGINT,
                         message_text TEXT,
-                        send_date DATE,
+                        send_date TIME,
                         captions JSON)""")
-            cur.execute("INSERT INTO "+ chatTableName +" (from_user, message_text, send_date) VALUES (%s,%s,%s)",(1,"say hello!",datetime.datetime.ctime()))
+            cur.execute("INSERT INTO "+ chatTableName +" (from_user, message_text, send_date) VALUES (%s,%s,%s)",(1,"say hello!",datetime.datetime.now()))
             self.base.commit()
             logging.log(level=logging.INFO, msg=f"Made table Chats_{chatid}")
         except Exception as e:
@@ -421,4 +421,6 @@ if __name__=="__main__":
             for i in res:
                 print(i)
         elif action=="send message":
+            pass
+        elif action=="fix":
             pass

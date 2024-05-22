@@ -11,6 +11,7 @@ from flask_socketio import SocketIO
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user, \
     AnonymousUserMixin
 from forms import *
+from flask_socketio import join_room, leave_room
 
 app = Flask(__name__)
 app.secret_key = SECRET_KEY
@@ -34,7 +35,7 @@ def load_user(id):
 
 @app.route("/")
 def index():
-    return render_template("base.html")
+    return redirect("login")
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -49,6 +50,7 @@ def login():
         db_user = db.getUserbyUsername(username)
         if db_user and CheckPasswordHash(db_user['password'],password):
             user = UserMixin()
+            socketio.emit()
             user.__setattr__("id",db_user[0])
             login_user(user)
             return redirect('chats/')
@@ -105,6 +107,12 @@ def messages(chat_id):
     chat = [i for i in chats if i['id']==int(chat_id)][0]
     messages = db.handleMessageGet(chat_id)[::-1]
     return render_template("chat.html", messages = messages, users=chats, thisuser=thisuser, chat = chat)
+
+
+@socketio.on('message')
+def handle_message(data):
+    print(f'received message: {data}')
+    return {'status':200}
 
 
 if __name__ == "__main__":
