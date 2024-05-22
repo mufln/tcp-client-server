@@ -20,7 +20,7 @@ body, html{
     overflow: hidden;
 }
 
-body, .user-info, header, footer{
+body, .user-info, header, footer, .file{
     display: flex;
     align-items: center;
     flex-direction: row;
@@ -49,8 +49,6 @@ body, .user-info, header, footer{
 }
 
 header, footer{
-    display: flex;
-    flex-direction: row;
     width: 100%;
     height: max-content;
     background-color: white;
@@ -186,7 +184,7 @@ a:link, a:visited {
     justify-items: center;
     padding: 10px;
 }
-
+/*
 .new-chat-button{
     background-color: white;
     border-radius: 50%;
@@ -201,7 +199,7 @@ a:link, a:visited {
         height: 50px;
     }
 }
-
+*/
 .text{
     background-color: white;
     padding: 10px;
@@ -222,5 +220,82 @@ a:link, a:visited {
         display: flex;
         justify-content: space-between;
     }
+    img{
+        border-radius: 10px;
+        object-fit: cover;
+    }
+}
 
+.file{
+    margin: 10px 0px;
+    justify-content: flex-start;
+    img{
+        width: 50px; 
+        height: 50px;
+    }
+}
+
+.new-chat-button{
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    margin: 5px;
+    img{
+        margin: 0px 5px;
+        width: 20px;
+        height: auto;
+        border-radius: 50%;
+    }
+}
+
+.new-chat-button:hover, button:hover, .search>a:hover{
+    cursor: pointer;
+    opacity: 0.5;
+}
+
+.search{
+
+    background-color: #d1e1ff;
+    border-radius: 10px;
+    margin: 10px;
+    padding: 5px;
+
+    input::-webkit-search-decoration,
+    input::-webkit-search-cancel-button,
+    input::-webkit-search-results-button,
+    input::-webkit-search-results-decoration {
+    -webkit-appearance:none;
+    }
+
+    .search-field{
+        display: flex;
+        flex-direction: row;
+    }
+
+    input{
+        width: 100%;
+        padding: 2px 5px;
+        border-radius: 30px;
+        border: solid;
+        border-color: #9BB2DD;
+        font-size: smaller;
+    }
+    
+    input:focus{
+        outline: 0 !important;
+    }
+    .search-field>img {width: 20px;}
+    .avatar>img{
+        height: 30px;
+        width: 30px;
+    }
+    .last-mess, .name{
+        font-size: smaller;
+    }
+    button{
+        background: none;
+        border: none;
+    }
+    display: flex;
+    flex-direction: column;
 }

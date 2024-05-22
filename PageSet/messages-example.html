@@ -10,13 +10,45 @@
 <body>
 <div class="chats-column" style="float: left; width: 360px">
     <header style="box-shadow: 0px 2px 5px -2px rgba(125, 125, 125, 0.5);">
-        <a href="{{ url_for('static', filename='settings.html') }}">
             <div class="user-info" id="0">
-                <div class="avatar"><img src="user-testav.jpg"></div>
-                <div class="name">Your Name</div>
+                <a href="{{ url_for('static', filename='settings.html') }}">
+                    <div class="avatar"><img src="user-testav.jpg"></div>
+                </a>
+                <div class="text-info">
+                    <div class="name">Your Name</div>
+                    <div>  
+                    <a href="{{ url_for('static', filename='search.html') }}" class="new-chat-button" style="font-size: small;">
+                        <img src="new.png">
+                        Новый чат
+                    </a>  
+                    </div>
+                </div>
             </div>
-        </a>
     </header>
+    <div class="search">
+        <div class="search-field">
+            <input type="search">
+            <button>
+                <img src="search.png" style="width: 20px;">
+            </button>
+            <a href="close-search">
+                <img src="new.png" style="width: 20px; transform: rotate(45deg);">
+            </a>
+        </div>    
+        <div class="chats">
+            <div class="chat">
+                <a href="{{ url_for('static', filename='chat.html') }}" id="select-chat">
+                    <div class="user-info" id="1">
+                        <div class="avatar"><img src="testav2.png"></div>
+                        <div class="text-info">
+                            <div class="name">Justsome Snaker</div>
+                            <div class="last-mess">Some snake words idk what to text to test my idea</div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
     <div class="chats">
         <div class="chat">
             <a href="{{ url_for('static', filename='chat.html') }}" id="select-chat">
@@ -195,11 +227,13 @@
             </a>
         </div>
     </div>
+    <!--
     <div class="new-chat-button">
         <a href="https://doka.guide/css/fill/">
             <img src="new.png">
         </a>
     </div>
+-->
 </div>
 
 
@@ -282,11 +316,28 @@
             <div class="message">
                 <div class="avatar" style="width: 30px; height: 30px;"><img src="testav2.png"
                                                                             style="width: 30px; height: 30px;"></div>
-                <div class="text">
+                <div class="text" style="max-width: 30%;">
                     <div class="name-and-time">
                         <div class="name">Justsome Snaker</div>
                         <div class="time">20:30</div>
                     </div>
+                    <img src="user-testav.jpg">
+                    <p style="margin: 10px 0px 0px;">Some text idk what to text lalala lalala</p>
+                </div>
+            </div>
+            <div class="message">
+                <div class="avatar" style="width: 30px; height: 30px;"><img src="testav2.png"
+                                                                            style="width: 30px; height: 30px;"></div>
+                <div class="text" style="max-width: 30%;">
+                    <div class="name-and-time">
+                        <div class="name">Justsome Snaker</div>
+                        <div class="time">20:30</div>
+                    </div>
+                    <a class="file" href="https://online-edu.mirea.ru/pluginfile.php?file=%2F1269894%2Fmod_assign%2Fintroattachment%2F0%2FАлгоритмы%20-%20Рабочая%20тетрадь7%20.docx&amp;forcedownload=1">
+                        <img src="icon-file2.png">
+                        <div class="name">name-of-file.txt</div>
+                    </a>     
+                    <img src="user-testav.jpg">
                     <p style="margin: 10px 0px 0px;">Some text idk what to text lalala lalala</p>
                 </div>
             </div>

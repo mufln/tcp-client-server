@@ -76,7 +76,7 @@ h2{
 
 #name, #password, #enter{
     font-size: small;
-    width: 100%;
+    width: inherit;
     min-height: 30px;
 }
 
