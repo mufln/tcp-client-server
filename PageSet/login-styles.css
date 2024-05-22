@@ -38,10 +38,17 @@ body, html{
     align-items: center;
 }
 
+.app{
+    position: absolute;
+    width: max-content;
+    max-width: 95%;
+}
+
 .logo{
     img{
         height: 90px;
         width: 90px;
+        object-fit: cover;
     }
     align-items: center;
 }
@@ -104,7 +111,7 @@ input{
     color: white;
 }
 
-#enter:hover{
+#enter:hover, label:hover{
     cursor: pointer;
     opacity: 0.5;
 }
