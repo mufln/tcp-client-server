@@ -20,7 +20,7 @@ body, html{
     overflow: hidden;
 }
 
-body, .user-info, header, footer, .file{
+body, .user-info, header, .footer, .file{
     display: flex;
     align-items: center;
     flex-direction: row;
@@ -48,7 +48,7 @@ body, .user-info, header, footer, .file{
     width: 100%;
 }
 
-header, footer{
+header, .footer{
     width: 100%;
     height: max-content;
     background-color: white;
@@ -56,7 +56,7 @@ header, footer{
 }
 
 header {top: 0;}
-footer {
+.footer {
     max-height: 150px; 
     bottom: 0;
 }
