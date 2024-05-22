@@ -22,14 +22,15 @@
 </header>
 <div class="messages" id="messages">
     {% for message in messages %}
+    
     <div class="message">
         <div class="avatar" style="width: 30px; height: 30px;"><img src=" {{url_for('static',filename=message['from_user']['profile_pic_path'])}} "  style="width: 30px; height: 30px;"></div>
         <div class="text">
-          <div class="name">{{ message['from_user']['username']}}</div>
-          <div class="text-and-time">
-            {{ message['message_text'] }}
-            <div class="time">{{ message['send_date'] }}</div>
-          </div> 
+          <div class="name-and-time">
+              <div class="name">{{ message['from_user']['username']}}</div>
+              <div class="time">{{ message['send_date'] }}</div>
+          </div>
+          <p style="margin: 10px 0px 0px;">{{ message['message_text'] }}</p>
         </div>
       </div> 
     {% endfor %}

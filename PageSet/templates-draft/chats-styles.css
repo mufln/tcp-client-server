@@ -20,7 +20,7 @@ body, html{
     overflow: hidden;
 }
 
-body, .user-info, header, footer{
+body, .user-info, header, .footer{
     display: flex;
     align-items: center;
     flex-direction: row;
@@ -48,7 +48,7 @@ body, .user-info, header, footer{
     width: 100%;
 }
 
-header, footer{
+header, .footer{
     display: flex;
     flex-direction: row;
     width: 100%;
@@ -58,7 +58,7 @@ header, footer{
 }
 
 header {top: 0;}
-footer {
+.footer {
     max-height: 150px; 
     bottom: 0;
 }
@@ -83,7 +83,6 @@ footer {
 }
 
 .messages{
-    position: relative;
     flex: 1;
     overflow: auto;
 }
@@ -102,33 +101,15 @@ footer {
     }
 }
 
-.send, .down{
+.send {
     border-radius: 50%;
     height: 50px;
     width: 50px;
     margin: 10px;
-}
-
-.send{
     img {
         transform: scale(-1, 1);
     }
     input {
-        visibility: hidden;
-    }
-}
-
-.down{
-    position: fixed;
-    top: 90px;
-    right: 20px;
-    img {
-        transform: rotate(270deg);
-        height: 50px;
-        width: 50px;
-        border-radius: 50%;
-    }
-    button {
         visibility: hidden;
     }
 }
@@ -145,18 +126,17 @@ footer {
 }
 
 .text-field{
-    max-height: 100%;
+    max-height: 150px;
     flex: 1;
     display: flex;
     align-items: flex-end;
-    overflow: hidden;
+    overflow: auto;
 }
 
 textarea{
     width: 100%;
     border: none;
     resize: none;
-    overflow: auto;
 }
 
 textarea:focus{

@@ -3,7 +3,7 @@
   {% block head %}
     <meta charset="utf-8">
     <title>parceltongue</title>
-    <link rel="stylesheet" href="{{url_for('static',filename='chats-styles.css')}}">
+    <link rel="stylesheet" href="chats-styles.css">
   </head>
   {% endblock %}
 
@@ -11,9 +11,9 @@
     <div class="chats-column" style="float: left; width: 360px">
       <header style="position: sticky; box-shadow: 0px 2px 5px -2px rgba(125, 125, 125, 0.5);">
         <div class="user-info">
-          <div  class="avatar"><img src="{{ url_for('static',filename=thisuser['profile_pic_path']) }}"></div>
+          <div  class="avatar"><img src="{{ self.avatar }}"></div>
           <!--self.avatar - это имя файла аватарки аккаунта, с которого мы сидим-->
-          <div class="name">{{ thisuser['username'] }}</div>
+          <div class="name">{{ self.username }}</div>
           <!--self.username - это имя аккаунта, с которого мы сидим-->
         </div>
       </header>
@@ -21,14 +21,14 @@
         {% for user in users %}
         <!--users - список пользователей, с которыми мы вообще общались-->
         <div class="chat">
-          <a id="select-chat" href="{{user['id']}}">
+          <a id="select-chat" href="{{ url_for('chat', chat_user=) }}">
             <!--эээ надо понять, как получить id чата, я не понимаю-->
           <div class="user-info">
-            <div  class="avatar"><img src="{{ url_for('static',filename=user['chat_pic_path']) }}"></div>
+            <div  class="avatar"><img src="{{ user.avatar }}"></div>
             <div class="text-info">
-              <div class="name">{{ user["chatname"] }}</div>
+              <div class="name">{{ user.username }}</div>
               <!--user.username - это имя пользователя, с которым был диалог-->
-              <div class="last-mess">{{ user["last_message"] }}</div>
+              <div class="last-mess">{{ user.messages[0].text }}</div>
               <!--user.messages[0].text - предполагается, что для каждого user есть массив сообщений (допустим, текст+автор)-->
               <!--, где последнее соо лежит в конце... и из сообщения мне здесь нужен только его текст-->
             </div>
@@ -36,13 +36,18 @@
             </a>
         </div>
         {% endfor %}
-      </div>  
+      </div> 
+      <div class="new-chat-button">
+        <a href="{{ url_for('new-chat') }}">
+          <img src="img/new.png">              
+        </a>
+      </div> 
     </div>
 
 
     <div class="message-column" style="float: right;">
         {% if chat_user != 'здесь что-то дефолтное' %}
-            {% block chat %}{%endblock%}
+            {% block chat}{%endblock%}
         {% endif %}
     </div>
   {% endblock %}

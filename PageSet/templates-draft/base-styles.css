@@ -38,17 +38,10 @@ body, html{
     align-items: center;
 }
 
-.app{
-    position: absolute;
-    width: max-content;
-    max-width: 95%;
-}
-
 .logo{
     img{
         height: 90px;
         width: 90px;
-        object-fit: cover;
     }
     align-items: center;
 }
@@ -87,20 +80,6 @@ input{
     border-color: #9bb2dd;
 }
 
-.pin {
-    border-radius: 50%;
-    height: 30px;
-    width: 30px;
-    margin: 20px;
-    img {
-        height: 30px;
-        width: 30px;
-    }
-    input {
-        visibility: hidden;
-    }
-}
-
 #enter{
     font-size: medium;
     font-weight: bold;
@@ -111,7 +90,7 @@ input{
     color: white;
 }
 
-#enter:hover, label:hover{
+#enter:hover{
     cursor: pointer;
     opacity: 0.5;
 }

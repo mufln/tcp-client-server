@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>parceltongue</title>
+    <link rel="stylesheet" href="login-styles.css">
+  </head>
+
+  <body>
+    <div class="app">
+      <div class="logo">
+        <label for="docpicker">
+            <img src="user-testav.jpg" style="border-radius: 50%; height: 100px; width: 100px">
+        </label>
+        <input
+          style="visibility: hidden;"
+          method="POST"
+          type="file"
+          id="docpicker"
+          accept=".jpg,.png" />
+        <h1>Your Name</h1>
+      </div>
+      <h2>Настройки</h2>
+      <form class="login">
+        <input type="text" id="name" method="POST" placeholder="Новый логин" required>
+        <button id="enter">Изменить логин</button>
+      </form>
+      <a href="https://colorscheme.ru/html-colors.html">
+        <button id="enter" style="background-color: white; color: #9bb2dd;">Вернуться к чатам</button>
+      </a>
+      <button id="enter" style="background-color: white; color: firebrick;">Выйти из аккаунта</button>
+    </div>
+  </body> 
+    
+</html>
