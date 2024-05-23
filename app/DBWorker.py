@@ -143,11 +143,11 @@ class Worker():
             logging.log(logging.ERROR,msg=f"at isUserExist {e}")
 
 
-    def registerUser(self, username, password):
+    def registerUser(self, username, password, profile_pic):
         try:
             logging.log(logging.INFO, msg=f"Signing up new user with username = {username} and password hash = {password}")
             cur = self.base.cursor(cursor_factory=psycopg2.extras.DictCursor)
-            cur.execute("INSERT INTO Users (username, password, profile_pic_path, chats) VALUES (%s, %s, %s, %s)",(username,password,DEFAULT_PROFILE_PIC_PATH,json.dumps([])))
+            cur.execute("INSERT INTO Users (username, password, profile_pic_path, chats) VALUES (%s, %s, %s, %s)",(username,password,profile_pic if profile_pic else DEFAULT_PROFILE_PIC_PATH,json.dumps([])))
             self.base.commit()
             cur.close()
             logging.log(logging.INFO,msg=f"Registered new user {username}")
@@ -199,7 +199,7 @@ class Worker():
             logging.log(level=logging.INFO, msg=f"trying to get user by id {id} with username {username}")
             cur = self.base.cursor(cursor_factory=psycopg2.extras.DictCursor)
             if id:
-                cur.execute("UPDATE Users SET profile_pic_path%s WHERE id = %s", (path,id))
+                cur.execute("UPDATE Users SET profile_pic_path=%s WHERE id = %s", (path,id))
             else:
                 cur.execute("UPDATE Users SET profile_pic_path=%s WHERE username = %s", (path,username))
             self.base.commit()

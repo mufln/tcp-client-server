@@ -45,12 +45,17 @@
                     document.getElementById('body').appendChild(div);
                 }
         });
-        var users = [];
+        var users = new Set();
         function createChat(user_id){
             console.log('trying to create chat')
             if (checked==true){
-                console.log('checkbox checked, adding user to list')
-                users.push(user_id)
+                if(users.has(user_id)==true){
+                    console.log('checkbox checked, removing user from list')
+                    users.delete(user_id)
+                } else {
+                    console.log('checkbox checked, adding user to list')
+                    users.add(user_id)
+                }
             } else {
                 console.log('checkbox unchecked, creating chat')
                 socket.emit('createchat',{'is_direct':true,'user_id': [user_id]});
@@ -58,7 +63,7 @@
         }
         function createGroup(){
             console.log('checkbox checked, creating chat')
-            socket.emit('createchat',{'is_direct':false,'user_id': users,'chatname':document.getElementById('chatname').value});
+            socket.emit('createchat',{'is_direct':false,'user_id': Array.from(users),'chatname':document.getElementById('chatname').value});
         }
         socket.on('redirect_to_chat',function(chat_id){
             document.location.href = 'chats/'+chat_id;

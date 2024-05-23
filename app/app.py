@@ -17,8 +17,10 @@ app = Flask(__name__)
 app.secret_key = SECRET_KEY
 socketio = SocketIO(app)
 login_manager = LoginManager(app)
+from hash import *
+from werkzeug.datastructures import CombinedMultiDict
 # moment = Moment(app)
-
+from werkzeug.utils import secure_filename
 
 db = Worker(DB_HOST,DB_PORT,DB_USER,DB_PASSWORD,DB_NAME)
 # login_manager.login_view = 'login'
@@ -65,11 +67,17 @@ def register():
     logging.log(level=logging.INFO,msg="Got registration request")
     if current_user.is_authenticated:
         return redirect('chats/')
-    form = RegisterForm()
+    form = RegisterForm(CombinedMultiDict((request.files, request.form)))
     # print(form.is_submitted())
     if form.validate_on_submit():
         logging.log(logging.INFO,msg='Validating form')
         username = request.form.get('username').lower()
+        # imagefile = request.files.get('docpicker')
+        # logging.log(logging.INFO, msg=f"image {imagefile}")
+        f = form.docpicker.data
+        filename = secure_filename(f.filename)
+        f.save(os.path.join('static', filename))
+
         password1 = request.form.get('password1')
         password2 = request.form.get('password2')
         user = db.isUserExist(username)
@@ -82,7 +90,7 @@ def register():
             logging.log(logging.INFO, msg='Password mismatch')
             flash('пароли не совпадают')
             return redirect('register')
-        db.registerUser(username,GeneratePasswordHash(password1))
+        db.registerUser(username,GeneratePasswordHash(password1),filename)
         return redirect('login')
     return render_template("register.html", title='Sign up', form=form)
 
@@ -136,10 +144,20 @@ def messages(chat_id):
 @app.route('/settings', methods=['POST', 'GET'])
 @login_required
 def settings():
-    form = SettingsForm()
+    form = SettingsForm(CombinedMultiDict((request.files, request.form)))
     if form.validate_on_submit():
-        username = request.form.get('username').lower()
-        db.setUserName(current_user.get_id(),username)
+        f = form.docpicker.data
+        print(f"file {f}")
+        if f:
+            filename = secure_filename(f.filename)
+            f.save(os.path.join('static', filename))
+            db.setProfilePic(filename,int(current_user.get_id()))
+        # filename = secure_filename(f.filename)
+        # f.save(os.path.join('static', filename))
+        username = request.form.get('username')
+        print(f"username {username}")
+        if username:
+            db.setUserName(current_user.get_id(),username.lower())
     user = db.getUserbyID(current_user.get_id())
     return render_template('settings.html',form=form,user=user)
 
@@ -195,10 +213,10 @@ def createchat(data):
             if data['user_id'][0] in i['users'] and i['is_direct']:
                 emit('redirect_to_chat', i['id'], JSON=False)
                 return
-
     else:
         if int(current_user.get_id()) in data['user_id']:
-            return redirect('createchat')
+            data['user_id'].remove(int(current_user.get_id()))
+    print(data['user_id'])
     chat_id = db.addChat([int(current_user.get_id())]+data['user_id'],data['is_direct'],data['chatname'] if not data['is_direct'] else None)
     emit('redirect_to_chat', chat_id, JSON=False)
 
