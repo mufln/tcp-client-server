@@ -1,33 +1,59 @@
-
 {% extends 'base.html' %}
 {%block head%}
 <title>parceltongue</title>
 <link rel="stylesheet" href="{{url_for('static',filename='base-styles.css')}}">
 {% endblock %}
 {% block content %}
-    <div class="app">
-      <div class="logo">
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Получаем элемент input и изображение, которое мы хотим заменить
+        var fileInput = document.getElementById('docpicker');
+        var imageToReplace = document.getElementById('curpic');
+
+        // Добавляем обработчик события изменения для input
+        fileInput.addEventListener('change', function (event) {
+            // Получаем файл из input
+            var file = event.target.files[0];
+
+            // Убеждаемся, что файл является изображением
+            if (file && file.type.match('image.*')) {
+                // Создаем FileReader для чтения файла
+                var reader = new FileReader();
+
+                // Устанавливаем функцию, которая будет вызвана, когда файл будет прочитан
+                reader.onload = function (e) {
+                    // Обновляем источник изображения
+                    imageToReplace.src = e.target.result;
+                };
+
+                // Читаем файл как Data URL
+                reader.readAsDataURL(file);
+            }
+        });
+    });</script>
+<div class="app">
+    <div class="logo">
         <img src="{{url_for('static',filename='logo2.png')}}">
         <h1>parceltongue</h1>
-      </div>
-      <h2>Регистрация</h2>
-      {% with messages = get_flashed_messages() %}
-        {%if messages%}
-        {% for message in messages %}
-        <div class="flash">{{ message }}</div>
-        {% endfor %}
-        {% endif %}
-      <div class="pin">
-        <label for="docpicker"> <img src="{{url_for('static',filename='icon-pin.png')}}"> </label>
-        <input type="file" id="docpicker" accept=".jpg,.png" />
-      </div>
-      <form class="login" method="POST">
-        {{form.hidden_tag()}}
+    </div>
+    <h2>Регистрация</h2>
+    {% with messages = get_flashed_messages() %}
+    {%if messages%}
+    {% for message in messages %}
+    <div class="flash">{{ message }}</div>
+    {% endfor %}
+    {% endif %}
+    {{form.hidden_tag()}}
+    <form class="login" method="POST">
+        <div class="pin">
+            <label for="docpicker"> <img src="{{url_for('static',filename='icon-pin.png')}}" id="curpic"> </label>
+            <input type="file" id="docpicker" accept=".jpg,.png"/>
+        </div>
         <input type="text" id="name" name="username" placeholder="Логин" class="field" required>
         <input type="password" id="password1" name="password1" placeholder="Пароль" class="field" required>
         <input type="password" id="password2" name='password2' placeholder="Повторите пароль" class="field" required>
         <input id="enter" name='submit' type="submit" class="button" value='Зарегистрироваться'/>
-      </form>
-      {% endwith %}
-    </div>
+    </form>
+    {% endwith %}
+</div>
 {% endblock %}
