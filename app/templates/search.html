@@ -81,25 +81,26 @@
             }
         }
     </script>
-    <form class="search">
-        <div class="search-field">
-            <textarea rows="1" id="message_text" name="message_text" placeholder="поиск" class="text-field"></textarea>
-            <button type="submit" id="sender" name="sender" onclick="handleFindUser(event)">
-                <img src=" {{url_for('static',filename='search.png')}} " style="width: 20px;">
-            </button>
+    <div class="app">
+        <form class="search">
+            <div class="search-field">
+                <textarea rows="1" id="message_text" name="message_text" placeholder="поиск" class="text-field"></textarea>
+                <button type="submit" id="sender" name="sender" onclick="handleFindUser(event)">
+                    <img src=" {{url_for('static',filename='search.png')}} " style="width: 20px;">
+                </button>
+            </div>
+            <div class="new-group">
+                <p>Создать группу?</p>
+                <input type="checkbox" name="group" id = 'group' onclick="handleCheckbox()"/>
+            </div>
+        </form>
+        <div id="button_space">
+
         </div>
-        <div class="new-group">
-            <p>Создать группу?</p>
-            <input type="checkbox" name="group" id = 'group' onclick="handleCheckbox()"/>
+        <div id = 'body' class="wrapper">
+
         </div>
-    </form>
-    <div id="button_space">
-
     </div>
-    <div id = 'body'>
-
-    </div>
-
 
 </body>
 </html>
