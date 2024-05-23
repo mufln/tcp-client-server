@@ -1,6 +1,5 @@
 from Crypto.Hash import keccak
 
-
 def CheckPasswordHash(hash, password):
     checking = GeneratePasswordHash(password)
     return hash == checking
