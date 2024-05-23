@@ -171,7 +171,7 @@ def createchat(data):
     logging.log(level=logging.INFO,msg= f'recieved create chat request for user_id: {data}')
     # join_room(data['chat_id'])
     if data['is_direct']:
-        if not int(data['user_id'])==int(current_user.get_id()): logging.log(level=logging.INFO,msg='Creating chat')
+        if not int(data['user_id'][0])==int(current_user.get_id()): logging.log(level=logging.INFO,msg='Creating chat')
         else: return redirect('createchat')
     else:
         if int(current_user.get_id()) in data['user_id']:

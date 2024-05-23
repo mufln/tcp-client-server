@@ -45,7 +45,7 @@
                 users.push(user_id)
             } else {
                 console.log('checkbox unchecked, creating chat')
-                socket.emit('createchat',{'is_direct':true,'user_id': user_id});
+                socket.emit('createchat',{'is_direct':true,'user_id': [user_id]});
             }
         }
         function createGroup(){
