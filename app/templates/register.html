@@ -1,0 +1,33 @@
+
+{% extends 'base.html' %}
+{%block head%}
+<title>parceltongue</title>
+<link rel="stylesheet" href="{{url_for('static',filename='base-styles.css')}}">
+{% endblock %}
+{% block content %}
+    <div class="app">
+      <div class="logo">
+        <img src="{{url_for('static',filename='logo2.png')}}">
+        <h1>parceltongue</h1>
+      </div>
+      <h2>Регистрация</h2>
+      {% with messages = get_flashed_messages() %}
+        {%if messages%}
+        {% for message in messages %}
+        <div class="flash">{{ message }}</div>
+        {% endfor %}
+        {% endif %}
+      <div class="pin">
+        <label for="docpicker"> <img src="{{url_for('static',filename='icon-pin.png')}}"> </label>
+        <input type="file" id="docpicker" accept=".jpg,.png" />
+      </div>
+      <form class="login" method="POST">
+        {{form.hidden_tag()}}
+        <input type="text" id="name" name="username" placeholder="Логин" required>
+        <input type="password" id="password1" name="password1" placeholder="Пароль" required>
+        <input type="password" id="password2" name='password2' placeholder="Повторите пароль" required>
+        <input id="enter" name='submit' type="submit" value='Зарегистрироваться'/>
+      </form>
+      {% endwith %}
+    </div>
+{% endblock %}
