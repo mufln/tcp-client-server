@@ -69,6 +69,7 @@
             if(checked==true){
                 var div = document.createElement('div');
                 div.setAttribute('href', {{url_for('chats')}});
+                div.setAttribute('class', 'search-field');
                 div.innerHTML =
                 `<input type="text" class="text-field" name="chatname" id = 'chatname' placeholder="Введите название группы"/>
                  <div class="new-button">
@@ -96,7 +97,7 @@
                 <input type="checkbox" name="group" id = 'group' class="box" onclick="handleCheckbox()"/>
             </div>
         </form>
-        <div id="button_space" class="search-field">
+        <div id="button_space">
 
         </div>
         <div id = 'body' class="wrapper">
