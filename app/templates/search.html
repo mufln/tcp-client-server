@@ -25,7 +25,7 @@
                         console.log('rendering div')
                         div.setAttribute('href', {{url_for('chats')}});
                         div.innerHTML =
-                            `<div class="chat" onclick='createChat(${answer['id']})'>
+                            `<div class="chat" onclick='createChat(${answer['id']})' id='block${answer['id']}'>
                                 <div class="user-info">
                                     <div  class="avatar" style="width: 30px; height: 30px;">
                                         <img src="${answer['profile_pic_path']}"  style="width: 30px; height: 30px;">
@@ -45,12 +45,21 @@
                     document.getElementById('body').appendChild(div);
                 }
         });
-        var users = [];
+        var users = new Set();
         function createChat(user_id){
             console.log('trying to create chat')
             if (checked==true){
-                console.log('checkbox checked, adding user to list')
-                users.push(user_id)
+                if(users.has(user_id)==true){
+                    console.log('checkbox checked, removing user from list')
+                    document.getElementById('block'+user_id).style['background'] = 'white';
+                    users.delete(user_id)
+                } else {
+                    console.log('checkbox checked, adding user to list')
+                    document.getElementById('block'+user_id).style['background']  = '#d1e1ff';
+                    document.getElementById('block'+user_id).style['border-radius']  = '10px';
+
+                    users.add(user_id)
+                }
             } else {
                 console.log('checkbox unchecked, creating chat')
                 socket.emit('createchat',{'is_direct':true,'user_id': [user_id]});
@@ -58,7 +67,7 @@
         }
         function createGroup(){
             console.log('checkbox checked, creating chat')
-            socket.emit('createchat',{'is_direct':false,'user_id': users,'chatname':document.getElementById('chatname').value});
+            socket.emit('createchat',{'is_direct':false,'user_id': Array.from(users),'chatname':document.getElementById('chatname').value});
         }
         socket.on('redirect_to_chat',function(chat_id){
             document.location.href = 'chats/'+chat_id;

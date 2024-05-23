@@ -5,21 +5,36 @@
 <link rel="stylesheet" href="{{url_for('static',filename='base-styles.css')}}">
 {% endblock %}
 {% block content %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Получаем элемент input и изображение, которое мы хотим заменить
+        var fileInput = document.getElementById('docpicker');
+        var imageToReplace = document.getElementById('curpic');
+
+        // Добавляем обработчик события изменения для input
+        fileInput.addEventListener('change', function (event) {
+            // Получаем файл из input
+            var file = event.target.files[0];
+
+            // Убеждаемся, что файл является изображением
+            if (file && file.type.match('image.*')) {
+                // Создаем FileReader для чтения файла
+                var reader = new FileReader();
+
+                // Устанавливаем функцию, которая будет вызвана, когда файл будет прочитан
+                reader.onload = function (e) {
+                    // Обновляем источник изображения
+                    imageToReplace.src = e.target.result;
+                };
+
+                // Читаем файл как Data URL
+                reader.readAsDataURL(file);
+            }
+        });
+    });</script>
     <div class="app">
-      <div class="logo">
-        <label for="docpicker">
-            <!--здесь нужна ава юзера, с чьего аккаунта мы сидим-->
-            <img src="{{url_for('static',filename=user['profile_pic_path'])}}" style="border-radius: 50%; height: 100px; width: 100px">
-        </label>
-        <input
-          style="visibility: hidden;"
-          method="POST"
-          type="file"
-          id="docpicker"
-          accept=".jpg,.png" />
-        <h1>{{user['username']}}</h1>
-      </div>
-      <h2>Настройки</h2>
+
+      <h1>Настройки</h1>
       {% with messages = get_flashed_messages() %}
         {%if messages%}
         {% for message in messages %}
@@ -27,10 +42,25 @@
         {% endfor %}
         {% endif %}
         {% endwith %}
-      <form class="login" method="POST" >
+      <form class="login" method="POST" enctype="multipart/form-data">
         {{form.hidden_tag()}}
-        <input type="text" id="name" name="username" placeholder="Новый логин" class="field" required>
-        <button id="changelogin" name="changelogin" class="button">Изменить логин</button>
+        <div class="logo">
+        <label for="docpicker">
+            <!--здесь нужна ава юзера, с чьего аккаунта мы сидим-->
+            <img src="{{url_for('static',filename=user['profile_pic_path'])}}" id="curpic" name="curpic" style="border-radius: 50%; height: 100px; width: 100px">
+        </label>
+
+        <input
+          style="visibility: hidden;"
+          method="POST"
+          type="file"
+          id="docpicker"
+          name="docpicker"
+          accept=".jpg,.png" />
+        <h1>{{user['username']}}</h1>
+      </div>
+        <input type="text" id="name" name="username" placeholder="Новый логин" class="field">
+        <button id="changelogin" name="changelogin" class="button">Сохранить</button>
       </form>
       <a href="{{ url_for('chats') }}">
         <button id="backtochats" name="backtochats" class="button" style="background-color: white; color: #9bb2dd;">Вернуться к чатам</button>

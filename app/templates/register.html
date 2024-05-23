@@ -43,11 +43,11 @@
     <div class="flash">{{ message }}</div>
     {% endfor %}
     {% endif %}
-    {{form.hidden_tag()}}
-    <form class="login" method="POST">
+    <form class="login" method="POST" enctype="multipart/form-data">
+        {{form.hidden_tag()}}
         <div class="pin">
             <label for="docpicker"> <img src="{{url_for('static',filename='icon-pin.png')}}" id="curpic"> </label>
-            <input type="file" id="docpicker" accept=".jpg,.png"/>
+            <input type="file" id="docpicker" name="docpicker" accept=".jpg,.png"/>
         </div>
         <input type="text" id="name" name="username" placeholder="Логин" class="field" required>
         <input type="password" id="password1" name="password1" placeholder="Пароль" class="field" required>
