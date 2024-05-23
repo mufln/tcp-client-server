@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <script>
+        var socket = io();
+        socket.on('connect', function() {
+            socket.emit('connection', {'chat_id': 0});
+        });
+        function handleFindUser(e){
+            socket.emit('finduser', {'username':document.getElementById('message_text').value})
+            console.log('sent request');
+            e.preventDefault();
+        };
+        socket.on('founduser', function(answers){
+                console.log('recieved answer', answers);
+                document.getElementById('body').innerHTML = "";
+                function u(answer){
+                        var div = document.createElement('div');
+                        console.log('rendering div')
+                        div.setAttribute('href', {{url_for('chats')}});
+                        div.innerHTML =
+                            `<div class="avatar" onclick='createChat(${answer['id']})' style="width: 30px; height: 100px;"><img src="${answer['profile_pic_path']}"  style="width: 30px; height: 30px;">
+                                <div class="text">
+                                  <div class="name-and-time">
+                                      <div class="name">${answer['username']}</div>
+                                  </div>
+                                </div>
+                            </div>`;
+                        document.getElementById('body').appendChild(div);
+                    }
+                if(answers!=false){
+                    answers.forEach((answer)=> u(answer));
+                } else {
+                    var div = document.createElement('div');
+                    div.innerHTML = `<div class="text">Такого пользователя нет</div>`;
+                    document.getElementById('body').appendChild(div);
+                }
+        });
+        var users = [];
+        function createChat(user_id){
+            console.log('trying to create chat')
+            if (checked==true){
+                console.log('checkbox checked, adding user to list')
+                users.push(user_id)
+            } else {
+                console.log('checkbox unchecked, creating chat')
+                socket.emit('createchat',{'is_direct':true,'user_id': [user_id]});
+            }
+        }
+        function createGroup(){
+            console.log('checkbox checked, creating chat')
+            socket.emit('createchat',{'is_direct':false,'user_id': users,'chatname':document.getElementById('chatname').value});
+        }
+        socket.on('redirect_to_chat',function(chat_id){
+            document.location.href = 'chats/'+chat_id;
+        });
+        var checked = false;
+        function handleCheckbox(){
+            checked = !checked;
+            if(checked==true){
+                var div = document.createElement('div');
+                div.setAttribute('href', {{url_for('chats')}});
+                div.innerHTML =
+                `<input type="button" id="group_button" name="group_button" onclick="createGroup()" value="Создать группу"/>
+                <input type="text" name="chatname" id = 'chatname'/>`;
+                document.getElementById('button_space').appendChild(div);
+            } else {
+                document.getElementById('button_space').innerHTML = "";
+            }
+        }
+    </script>
+    <form>
+        <textarea rows="1" id="message_text" name="message_text" placeholder="поиск"></textarea>
+        <input type="submit" id="sender" name="sender" onclick="handleFindUser(event)"/>
+        <p>создать группу?</p>
+        <input type="checkbox" name="group" id = 'group' onclick="handleCheckbox()"/>
+
+
+    </form>
+    <div id="button_space">
+
+    </div>
+    <div id = 'body'>
+
+    </div>
+
+
+</body>
+</html>
