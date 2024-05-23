@@ -1,0 +1,103 @@
+
+body, html{
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    padding: 0;
+    margin: 0;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+    align-items: center;
+
+}
+
+.search{
+
+    background-color: #d1e1ff;
+    border-radius: 10px;
+    max-width: 50%;
+    min-width: 30%;
+    margin: 10px;
+    padding: 5px;
+
+    textarea::-webkit-search-decoration,
+    textarea::-webkit-search-cancel-button,
+    textarea::-webkit-search-results-button,
+    textarea::-webkit-search-results-decoration {
+    -webkit-appearance:none;
+    }
+
+    .search-field{
+        display: flex;
+        flex-direction: row;
+    }
+
+    textarea{
+        resize: none;
+        width: 100%;
+        padding: 2px 5px;
+        border-radius: 30px;
+        border: solid;
+        border-color: #9BB2DD;
+        font-size: smaller;
+    }
+    
+    textarea:focus{
+        outline: 0 !important;
+    }
+    .search-field>img {width: 20px;}
+    .avatar>img{
+        height: 30px;
+        width: 30px;
+    }
+    .last-mess, .name{
+        font-size: smaller;
+    }
+    button{
+        background: none;
+        border: none;
+    }
+    display: flex;
+    flex-direction: column;
+    ::-webkit-scrollbar{
+        width: 0px;
+    }
+}
+
+button:hover{
+    cursor: pointer;
+    opacity: 0.5;
+}
+
+body, .user-info, header, .footer, .file{
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+}
+
+.text-info{
+    overflow: hidden;
+    width: 100%;
+}
+
+.avatar{
+    img {
+        border-radius: 50%;
+        height: 50px;
+        width: 50px;
+        object-fit: cover;
+    }
+    margin: 10px;
+    border: none;
+}
+
+.name{font-weight: bold;}
+.name{
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
