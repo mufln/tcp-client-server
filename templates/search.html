@@ -1,3 +1,28 @@
 {% block search %}
-
+<div class="search">
+    <div class="search-field">
+        <input type="search">
+        <button>
+            <img src="{{url_for('static',filename='search.png')}}" style="width: 20px;">
+        </button>
+        <a href="close-search">
+            <img src="{{url_for('static',filename='new.png')}}" style="width: 20px; transform: rotate(45deg);">
+        </a>
+    </div>    
+    <div class="chats">
+        {% for user in found-users %}
+            <div class="chat">
+                <a href="{{ url_for('static', filename='chat.html') }}" id="select-found-chat" name="select-found-chat">
+                    <div class="user-info">
+                        <div class="avatar"><img src=" {{ url_for('static',filename=user['chat_pic_path']) }} "></div>
+                        <div class="text-info">
+                            <div class="name">{{ user["chatname"] }}</div>
+                            <div class="last-mess">{{ user["last_message"] }}</div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+</div>
 {%endblock%}
