@@ -8,7 +8,6 @@
 </header>
 <div class="messages">
     {% for message in messages %}
-    
     <div class="message">
         <div class="avatar" style="width: 30px; height: 30px;"><img src=" {{url_for('static',filename=message['from_user']['profile_pic_path'])}} "  style="width: 30px; height: 30px;"></div>
         <div class="text">
@@ -36,7 +35,7 @@
   </script>
 </div>
 
-  <form class="footer"  method="POST" href="">
+  <form class="footer"  method="POST">
     <div class="pin">
       <label for="docpicker">
         <img src="{{url_for('static',filename='icon-pin.png')}}">
@@ -47,9 +46,12 @@
         id="docpicker"
         accept=".doc,.docx,.txt,.jpg,.png" />
     </div>
-    <div class="text-field">
-      <textarea rows="1" id="message_text" name="message_text" placeholder="Write a message..."></textarea>
-    </div>
+    <div class="text-field" id="message_text" name="message_text">
+      <textarea method="POST" 
+                placeholder="
+Write a message...
+                " rows="3"></textarea>
+  </div>
     <div class="send">
       <label for="sender">
         <img src="{{url_for('static',filename='back.jpg')}}">
