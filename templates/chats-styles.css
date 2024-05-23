@@ -43,6 +43,11 @@ body, .user-info, header, .footer, .file{
     overflow: auto;
     padding: 10px;
 }
+
+.chats::-webkit-scrollbar{
+    width: 0px;
+}
+
 .text-info{
     overflow: hidden;
     width: 100%;
@@ -259,6 +264,7 @@ a:link, a:visited {
 
     background-color: #d1e1ff;
     border-radius: 10px;
+    max-height: 50%;
     margin: 10px;
     padding: 5px;
 
@@ -300,4 +306,7 @@ a:link, a:visited {
     }
     display: flex;
     flex-direction: column;
+    ::-webkit-scrollbar{
+        width: 0px;
+    }
 }
