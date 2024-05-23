@@ -4,6 +4,7 @@ import datetime
 import psycopg2
 import psycopg2.extras
 import logging
+from cfg import *
 logging.basicConfig(level=logging.INFO)
 class Worker():
     #-----------------------INIT---------------------------

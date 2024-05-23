@@ -424,11 +424,8 @@
                     method="POST"
                     type="file"/>
         </div>
-        <div class="text-field">
-            <textarea method="POST" 
-                      placeholder="
-Write a message...
-                      " rows="3"></textarea>
+        <div class="text-field" contenteditable="true">
+            <textarea method="POST" placeholder="Write a message..." rows="1" oninput="auto_grow(this)"></textarea>
         </div>
         <div class="send">
             <label for="sender">
@@ -438,6 +435,6 @@ Write a message...
         </div>
     </form>
 </div>
-<script src="script.js"></script>
+<script src="script-ks.js"></script>
 </body>
 </html>

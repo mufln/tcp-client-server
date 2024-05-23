@@ -29,7 +29,7 @@
         {% endwith %}
       <form class="login" method="POST">
         {{form.hidden_tag()}}
-        <input type="text" id="name" method="POST" placeholder="Новый логин" required>
+        <input type="text" class="nickname" id="name" method="POST" placeholder="Новый логин" required>
         <button id="enter">Изменить логин</button>
       </form>
       <a href="{{ url_for('chats') }}">

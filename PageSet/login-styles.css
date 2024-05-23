@@ -74,9 +74,9 @@ h2{
     justify-content: center;
 }
 
-#name, #password, #enter{
+.nickname, .password, #enter{
     font-size: small;
-    width: 100%;
+    width: inherit;
     min-height: 30px;
 }
 

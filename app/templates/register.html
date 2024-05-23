@@ -17,17 +17,17 @@
         <div class="flash">{{ message }}</div>
         {% endfor %}
         {% endif %}
-        {% endwith %}
+      <div class="pin">
+        <label for="docpicker"> <img src="{{url_for('static',filename='icon-pin.png')}}"> </label>
+        <input type="file" id="docpicker" accept=".jpg,.png" />
+      </div>
       <form class="login" method="POST">
         {{form.hidden_tag()}}
-        <div class="pin">
-            <label for="docpicker"> <img src="{{url_for('static',filename='icon-pin.png')}}"> </label>
-            <input type="file" id="docpicker" accept=".jpg,.png" />
-        </div>
-        <input type="text" id="name" placeholder="Логин" required>
+        <input type="text" id="name" name="username" placeholder="Логин" required>
         <input type="password" id="password1" name="password1" placeholder="Пароль" required>
         <input type="password" id="password2" name='password2' placeholder="Повторите пароль" required>
-        <button id="enter" type="submit">Зарегистрироваться</button>
+        <input id="enter" name='submit' type="submit" value='Зарегистрироваться'/>
       </form>
+      {% endwith %}
     </div>
 {% endblock %}

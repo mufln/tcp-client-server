@@ -55,7 +55,7 @@ def login():
             login_user(user)
             return redirect('chats/')
         flash("Неверные учетные данные")
-        redirect('login')
+        return redirect('login')
     return render_template("login.html", title='Sign In', form=form)
 
 
@@ -65,21 +65,26 @@ def register():
     logging.log(level=logging.INFO,msg="Got registration request")
     if current_user.is_authenticated:
         return redirect('chats/')
-    form = LoginForm()
+    form = RegisterForm()
+    # print(form.is_submitted())
     if form.validate_on_submit():
+        logging.log(logging.INFO,msg='Validating form')
         username = request.form.get('username').lower()
         password1 = request.form.get('password1')
         password2 = request.form.get('password2')
         user = db.isUserExist(username)
+        # print(user)
         if user:
+            logging.log(logging.INFO, msg='Username already used')
             flash('юзернейм уже используется')
             return redirect('register')
         if password1!=password2:
+            logging.log(logging.INFO, msg='Password mismatch')
             flash('пароли не совпадают')
             return redirect('register')
         db.registerUser(username,GeneratePasswordHash(password1))
         return redirect('login')
-    return render_template("register.html", title='Sign In', form=form)
+    return render_template("register.html", title='Sign up', form=form)
 
 
 @app.route('/logout')
