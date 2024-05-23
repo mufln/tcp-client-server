@@ -1,11 +1,16 @@
 
 @font-face {
     font-family: "Roboto";
-    src: local("Roboto");
+    /* Браузер сначала попробует найти шрифт локально */
+    src: local("Roboto"),
+         /* Если не получилось, загрузит woff2 */
+         url("/fonts/roboto.woff2") format("woff2"),
+         /* Если браузер не поддерживает woff2, загрузит woff */
+         url("/fonts/roboto.woff") format("woff");
   }
 
 * {
-    font-family: "Roboto", "Arial";
+    font-family: "Urbanist", "Roboto", "Arial";
     font-size: medium;
 }
 
@@ -69,9 +74,9 @@ h2{
     justify-content: center;
 }
 
-#name, #password, #enter, #changelogin, #backtochats, #logout{
+.field, .button{
     font-size: small;
-    width: 100%;
+    width: inherit;
     min-height: 30px;
 }
 
@@ -98,7 +103,7 @@ input{
     }
 }
 
-.button {
+.button{
     font-size: medium;
     font-weight: bold;
     margin: 10px 0px;
@@ -108,9 +113,7 @@ input{
     color: white;
 }
 
-.button, label{
-    :hover{
-        cursor: pointer;
-        opacity: 0.5;
-    }
+.button:hover, label:hover{
+    cursor: pointer;
+    opacity: 0.5;
 }
