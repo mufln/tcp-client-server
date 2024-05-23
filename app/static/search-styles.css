@@ -25,6 +25,11 @@ body, html{
 
 }
 
+.app, .wrapper{
+    display: flex;
+    flex-direction: column;
+}
+
 .search{
 
     background-color: #d1e1ff;
