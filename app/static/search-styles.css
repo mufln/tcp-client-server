@@ -25,6 +25,11 @@ body, html{
 
 }
 
+.app{
+    max-width: 50%;
+    min-width: 30%;
+}
+
 .app, .wrapper{
     display: flex;
     flex-direction: column;
@@ -36,8 +41,6 @@ body, html{
     display: flex;
     flex-direction: column;
     border-radius: 10px;
-    max-width: 50%;
-    min-width: 30%;
     margin: 10px;
     padding: 5px;
 
