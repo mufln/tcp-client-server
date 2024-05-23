@@ -195,7 +195,7 @@ class Worker():
             logging.log(level=logging.INFO, msg=f"trying to get user by id {id}")
             cur = self.base.cursor(cursor_factory=psycopg2.extras.DictCursor)
             cur.execute("SELECT * FROM Users WHERE ID = %s", (id,))
-            user = cur.fetchone()
+            user = dict(cur.fetchone())
             cur.close()
             logging.log(level=logging.INFO, msg=f"Got user {user}")
             return user
@@ -341,10 +341,13 @@ class Worker():
         try:
             logging.log(level=logging.INFO,msg=f'Getting messages from chat {chat_id}')
             cur = self.base.cursor(cursor_factory=psycopg2.extras.DictCursor)
+            cur.execute("SELECT * FROM Chats WHERE ID =%s", (chat_id,))
+            chat = cur.fetchone()
             cur.execute("SELECT * FROM Chat_"+chat_id+ " ORDER BY ID DESC LIMIT 100")
             messages = [dict(i) for i in cur.fetchall()]
+            users = {user_id:self.getUserbyID(user_id) for user_id in chat['users']}
             for message in messages:
-                message.__setitem__('from_user', self.getUserbyID(message['from_user']))
+                message.__setitem__('from_user', users[message['from_user']])
                 message.__setitem__("send_date",message['send_date'].strftime("%H:%M"))
             logging.log(level=logging.INFO, msg=f'Success')
             cur.close()

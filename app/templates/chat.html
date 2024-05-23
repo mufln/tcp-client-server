@@ -6,14 +6,37 @@
         window.onload = function()
         {
             document.getElementById('messages').scrollTop = document.getElementById('messages').scrollHeight;
-            (document).ready(() => {$('message_input').on('submit',(e)=>{e.preventDefault();});});
         }
+
     </script>
-    <script type="text/javascript" charset="utf-8">
+    <script>
         var socket = io();
         socket.on('connect', function() {
-            socket.emit('message', {data: 'I\'m connected!'});
+            socket.emit('connection', {chat_id: "{{chat['id']}}"});
         });
+        socket.on('message_recieve', function(message){
+        var div = document.createElement('div');
+        console.log('recieved message');
+        div.setAttribute('class', 'message');
+        div.innerHTML = `<div class="avatar" style="width: 30px; height: 30px;"><img src="${message['from_user']['profile_pic_path']}"  style="width: 30px; height: 30px;"></div>
+                <div class="text">
+                  <div class="name-and-time">
+                      <div class="name">${message['from_user']['username']}</div>
+                      <div class="time">${message['send_date']}</div>
+                  </div>
+                  <p style="margin: 10px 0px 0px;">${message['message_text']}</p>
+                </div>`;
+        document.getElementById('messages').appendChild(div);
+        document.getElementById('messages').scrollTop = document.getElementById('messages').scrollHeight+100;
+        });
+
+        function handleMessagePost(e){
+            e.preventDefault();
+            var x = document.getElementById('message_text');
+            socket.emit('message_post',{chat_id: "{{chat['id']}}", message_text: document.getElementById('message_text').value});
+            document.getElementById("message_input").reset();
+            return false;
+        }
     </script>
     <div class="user-info">
       <div class="avatar"><img src="{{url_for('static',filename=chat['chat_pic_path'])}}"></div>
@@ -41,7 +64,6 @@
         <img src="{{url_for('static',filename='icon-pin.png')}}">
       </label>
       <input
-        method="POST"
         type="file"
         id="docpicker"
         accept=".doc,.docx,.txt,.jpg,.png" />
@@ -53,7 +75,7 @@
       <label for="sender">
         <img src="{{url_for('static',filename='back.jpg')}}">
       </label>
-      <input type="submit" id="sender" name="sender"/>
+      <input type="submit" id="sender" name="sender" onclick="handleMessagePost(event)"/>
     </div>
   </form>
 {% endblock %}

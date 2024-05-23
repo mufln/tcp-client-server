@@ -1,3 +1,4 @@
+import datetime
 import logging
 import asyncio
 import flask
@@ -7,9 +8,8 @@ from DBWorker import Worker
 from flask import Flask
 from uuid import uuid4
 from flask import render_template, request, flash, redirect, url_for
-from flask_socketio import SocketIO
-from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user, \
-    AnonymousUserMixin
+from flask_socketio import SocketIO, emit, send
+from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 from forms import *
 from flask_socketio import join_room, leave_room
 
@@ -45,12 +45,12 @@ def login():
         return redirect('chats/')
     form = LoginForm()
     if form.validate_on_submit():
-        username = request.form.get("username")
+        username = request.form.get("username").lower()
         password = request.form.get("password")
         db_user = db.getUserbyUsername(username)
         if db_user and CheckPasswordHash(db_user['password'],password):
             user = UserMixin()
-            socketio.emit()
+            # socketio.emit()
             user.__setattr__("id",db_user[0])
             login_user(user)
             return redirect('chats/')
@@ -59,21 +59,27 @@ def login():
     return render_template("login.html", title='Sign In', form=form)
 
 
-@app.route('/register')
+
+@app.route('/register', methods=['POST','GET'])
 def register():
-    return render_template("register.html")
-
-
-@app.route('/register', methods=['POST'])
-def register_post():
-    username = request.form.get('username').lower()
-    password = request.form.get('password')
-    user = db.isUserExist(username)
-    if user:
-        flash('username already exists')
-        return redirect('register')
-    db.registerUser(username,GeneratePasswordHash(password))
-    return redirect('login')
+    logging.log(level=logging.INFO,msg="Got registration request")
+    if current_user.is_authenticated:
+        return redirect('chats/')
+    form = LoginForm()
+    if form.validate_on_submit():
+        username = request.form.get('username').lower()
+        password1 = request.form.get('password1')
+        password2 = request.form.get('password2')
+        user = db.isUserExist(username)
+        if user:
+            flash('юзернейм уже используется')
+            return redirect('register')
+        if password1!=password2:
+            flash('пароли не совпадают')
+            return redirect('register')
+        db.registerUser(username,GeneratePasswordHash(password1))
+        return redirect('login')
+    return render_template("register.html", title='Sign In', form=form)
 
 
 @app.route('/logout')
@@ -97,9 +103,9 @@ def chats():
 @app.route('/chats/<chat_id>', methods=['POST', 'GET'])
 @login_required
 def messages(chat_id):
-    print(chat_id)
+    # print(chat_id)
     text = request.form.get('message_text')
-    print(text)
+    # print(text)
     if text:
         db.handleMessagePost(chat_id,current_user.get_id(),text)
     thisuser = db.getUserbyID(current_user.get_id())
@@ -109,10 +115,22 @@ def messages(chat_id):
     return render_template("chat.html", messages = messages, users=chats, thisuser=thisuser, chat = chat)
 
 
-@socketio.on('message')
+@socketio.on('message_post')
 def handle_message(data):
-    print(f'received message: {data}')
-    return {'status':200}
+    logging.log(level=logging.INFO,msg= f'received message: {data}')
+    db.handleMessagePost(data['chat_id'],current_user.get_id(),data['message_text'])
+    data.__setitem__('from_user', db.getUserbyID(current_user.get_id()))
+    data['from_user'].__setitem__('profile_pic_path',url_for('static',filename=data['from_user']['profile_pic_path']))
+    data.__setitem__('send_date', datetime.datetime.now().strftime('%H:%M'))
+    # join_room(data['room'])
+    emit('message_recieve',data,broadcast=True)
+
+
+@socketio.on('connection')
+def connect(data):
+    logging.log(level=logging.INFO,msg= f'recieved connection request for chat: {data}')
+    join_room(data['chat_id'])
+    pass
 
 
 if __name__ == "__main__":
