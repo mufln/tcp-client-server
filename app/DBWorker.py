@@ -138,7 +138,7 @@ class Worker():
             res = cur.fetchone()
             logging.log(logging.INFO,msg=f"Checked User {username} existance = {res if res else False}")
             cur.close()
-            return res if res else False
+            return dict(res) if res else False
         except Exception as e:
             logging.log(level=logging.ERROR,msg=e)
 
@@ -231,6 +231,18 @@ class Worker():
         except Exception as e:
             logging.log(level=logging.ERROR, msg=e)
 
+
+    def setUserName(self, user_id, username):
+        try:
+            logging.log(level=logging.INFO, msg=f"trying to get user by id {user_id} with username {username}")
+            cur = self.base.cursor()
+            cur.execute("UPDATE Users SET username=%s WHERE id = %s", (username,user_id))
+            self.base.commit()
+            cur.close()
+            logging.log(level=logging.INFO, msg=f"Updated username for user {user_id} to {username}")
+        except Exception as e:
+            logging.log(level=logging.ERROR, msg=e)
+
     # ---------------------------------------------------------
 
 
@@ -255,6 +267,7 @@ class Worker():
             self.base.commit()
             cur.close()
             logging.log(level=logging.INFO,msg="Success")
+            return chat_id
         except Exception as e:
             logging.log(level=logging.ERROR, msg=e)
 
@@ -308,7 +321,8 @@ class Worker():
                 chat = cur.fetchone()
                 if chat['is_direct']:
                     users = chat['users']
-                    users.remove(user['id'])
+                    print(users)
+                    users.remove(int(user['id']))
                     to_user_id = users[0]
                     to_user = self.getUserbyID(to_user_id)
                     inst.__setitem__('chat_pic_path',to_user['profile_pic_path'])

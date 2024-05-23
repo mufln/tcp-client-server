@@ -120,6 +120,24 @@ def messages(chat_id):
     return render_template("chat.html", messages = messages, users=chats, thisuser=thisuser, chat = chat)
 
 
+@app.route('/settings', methods=['POST', 'GET'])
+@login_required
+def settings():
+    form = SettingsForm()
+    if form.validate_on_submit():
+        username = request.form.get('username').lower()
+        db.setUserName(current_user.get_id(),username)
+    user = db.getUserbyID(current_user.get_id())
+    return render_template('settings.html',form=form,user=user)
+
+
+@app.route('/search', methods=['POST', 'GET'])
+@login_required
+def search():
+    user = db.getUserbyID(current_user.get_id())
+    return render_template('search.html', user = user)
+
+
 @socketio.on('message_post')
 def handle_message(data):
     logging.log(level=logging.INFO,msg= f'received message: {data}')
@@ -136,6 +154,29 @@ def connect(data):
     logging.log(level=logging.INFO,msg= f'recieved connection request for chat: {data}')
     join_room(data['chat_id'])
     pass
+
+
+@socketio.on('finduser')
+def finduser(data):
+    logging.log(level=logging.INFO,msg= f'recieved find user request for username: {data}')
+    # join_room(data['chat_id'])
+    user = db.isUserExist(data['username'])
+    if user:
+        user['profile_pic_path'] = url_for('static',filename=user['profile_pic_path'])
+    emit('founduser', user)
+
+
+@socketio.on('createchat')
+def createchat(data):
+    logging.log(level=logging.INFO,msg= f'recieved create chat request for user_id: {data}')
+    # join_room(data['chat_id'])
+    if not int(data['user_id'])==int(current_user.get_id()):
+        logging.log(level=logging.INFO,msg='Creating chat')
+        chat_id = db.addChat([int(current_user.get_id()),data['user_id']],True)
+        emit('redirect_to_chat', chat_id, JSON=False)
+    return redirect('createchat')
+
+
 
 
 if __name__ == "__main__":

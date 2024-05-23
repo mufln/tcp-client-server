@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <script>
+        var socket = io();
+        socket.on('connect', function() {
+            socket.emit('connection', {'chat_id': 0});
+        });
+        function handleFindUser(e){
+            socket.emit('finduser', {'username':document.getElementById('message_text').value})
+            console.log('sent request');
+            e.preventDefault();
+        };
+        socket.on('founduser', function(answer){
+            console.log('recieved answer', answer);
+            document.getElementById('body').innerHTML = "";
+            if(answer!=false){
+                var div = document.createElement('div');
+                div.setAttribute('href', {{url_for('chats')}});
+                div.innerHTML =
+                    `<div class="avatar" onclick='createChat(${answer['id']})' style="width: 30px; height: 30px;"><img src="${answer['profile_pic_path']}"  style="width: 30px; height: 30px;">
+                        <div class="text">
+                          <div class="name-and-time">
+                              <div class="name">${answer['username']}</div>
+                          </div>
+                        </div>
+                    </div>`;
+                document.getElementById('body').appendChild(div);
+            } else {
+                var div = document.createElement('div');
+                div.innerHTML = `<div class="text">Такого пользователя нет</div>`;
+                document.getElementById('body').appendChild(div);
+            }
+        });
+        function createChat(id){
+            socket.emit('createchat',{'user_id': id});
+        }
+        socket.on('redirect_to_chat',function(chat_id){
+            document.location.href = 'chats/'+chat_id;
+        });
+
+    </script>
+    <form>
+        <textarea rows="1" id="message_text" name="message_text" placeholder="Начните поиск человека"></textarea>
+        <input type="submit" id="sender" name="sender" onclick="handleFindUser(event)"/>
+    </form>
+    <div id = 'body'>
+
+    </div>
+
+
+</body>
+</html>
