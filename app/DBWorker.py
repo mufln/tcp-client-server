@@ -47,7 +47,7 @@ class Worker():
             cur.close()
             logging.log(logging.INFO,msg="Success")
         except Exception as e:
-            logging.log(logging.ERROR,msg=e)
+            logging.log(logging.ERROR,msg=f"at make tables {e}")
 
 
     def dropTables(self):
@@ -59,7 +59,7 @@ class Worker():
             cur.close()
             logging.log(level=logging.INFO,msg="Dropped all tables")
         except Exception as e:
-            logging.log(logging.ERROR,msg=e)
+            logging.log(logging.ERROR,msg=f"at drop tables {e}")
 
 
     def makeChat(self, chatid, cur):
@@ -72,11 +72,11 @@ class Worker():
                         message_text TEXT,
                         send_date TIME,
                         captions JSON)""")
-            cur.execute("INSERT INTO "+ chatTableName +" (from_user, message_text, send_date) VALUES (%s,%s,%s)",(1,"say hello!",datetime.datetime.now()))
+            # cur.execute("INSERT INTO "+ chatTableName +" (from_user, message_text, send_date) VALUES (%s,%s,%s)",(1,"say hello!",datetime.datetime.now()))
             self.base.commit()
             logging.log(level=logging.INFO, msg=f"Made table Chats_{chatid}")
         except Exception as e:
-            logging.log(logging.ERROR, msg=e)
+            logging.log(logging.ERROR,msg=f"at make chat {e}")
 
 
     def makeCaptions(self, chatid,cur):
@@ -91,7 +91,7 @@ class Worker():
             self.base.commit()
             logging.log(level=logging.INFO,msg="Success")
         except Exception as e:
-            logging.log(logging.ERROR,msg=e)
+            logging.log(logging.ERROR,msg=f"at make captions {e}")
 
 
     def connect(self):
@@ -112,7 +112,7 @@ class Worker():
             self.base.close()
             logging.log(level=logging.INFO, msg="Success")
         except Exception as e:
-            logging.log(level=logging.ERROR,msg=e)
+            logging.log(logging.ERROR,msg=f"at close {e}")
     #---------------------------------------------------------
 
 
@@ -127,7 +127,7 @@ class Worker():
             cur.close()
             return password
         except Exception as e:
-            logging.log(level=logging.ERROR,msg=e)
+            logging.log(logging.ERROR,msg=f"at get password hash {e}")
 
 
     def isUserExist(self, username):
@@ -140,7 +140,7 @@ class Worker():
             cur.close()
             return dict(res) if res else False
         except Exception as e:
-            logging.log(level=logging.ERROR,msg=e)
+            logging.log(logging.ERROR,msg=f"at isUserExist {e}")
 
 
     def registerUser(self, username, password):
@@ -152,43 +152,20 @@ class Worker():
             cur.close()
             logging.log(logging.INFO,msg=f"Registered new user {username}")
         except Exception as e:
-            logging.log(logging.ERROR,msg=e)
+            logging.log(logging.ERROR,msg=f"at registerUser {e}")
 
 
-    # def addSession(self,username,session_id):
-    #     try:
-    #         cur = self.base.cursor(cursor_factory=psycopg2.extras.DictCursor)
-    #         cur.execute("SELECT ID FROM Users WHERE username=%s",(username,))
-    #         user_id = cur.fetchone()[0]
-    #         cur.execute("INSERT INTO FlaskSessions (ID,user_id) VALUES (%s,%s)",(session_id,user_id))
-    #     except Exception as e:
-    #         logging.log(level=logging.ERROR, msg=e)
-
-
-    # def getSessions(self,username):
-    #     try:
-    #         logging.log(level=logging.INFO,msg=f"Trying to get sessions for {username}")
-    #         cur = self.base.cursor(cursor_factory=psycopg2.extras.DictCursor)
-    #         cur.execute("SELECT ID FROM Users WHERE username = %s",(username,))
-    #         user_id = cur.fetchone()[0]
-    #         cur.execute("SELECT ID FROM Flask_Sessions WHERE user_id",(user_id,))
-    #         sessions = cur.fetchall()
-    #         # print(sessions)
-    #         logging.log(level=logging.INFO,msg=f"Got {sessions}")
-    #     except Exception as e:
-    #         logging.log(level=logging.ERROR, msg=e)
-
-
-    # def getUserIDBySessionID(self,session_id):
-    #     try:
-    #         logging.log(level=logging.INFO,msg=f"trying to get user_id for session {session_id}")
-    #         cur = self.base.cursor(cursor_factory=psycopg2.extras.DictCursor)
-    #         cur.execute("SELECT user_id FROM FlaskSessions WHERE session_id = %s", (session_id,))
-    #         user_id = cur.fetchone()[0]
-    #         logging.log(level=logging.INFO, msg=f"trying to get user_id for session {user_id}")
-    #         return user_id
-    #     except Exception as e:
-    #         logging.log(level=logging.ERROR, msg=e)
+    def getUsersByName(self,name):
+        try:
+            cur = self.base.cursor(cursor_factory=psycopg2.extras.DictCursor)
+            cur.execute("SELECT * FROM Users WHERE username LIKE %s", ('%'+name+'%',))
+            res = cur.fetchall()
+            res1 = []
+            for i in res:
+                res1.append(dict(i))
+            return res1 if res else False
+        except Exception as e:
+            logging.log(logging.ERROR,msg=f"at getUserByName {e}")
 
 
     def getUserbyID(self,id):
@@ -196,12 +173,12 @@ class Worker():
             logging.log(level=logging.INFO, msg=f"trying to get user by id {id}")
             cur = self.base.cursor(cursor_factory=psycopg2.extras.DictCursor)
             cur.execute("SELECT * FROM Users WHERE ID = %s", (id,))
-            user = dict(cur.fetchone())
+            user = cur.fetchone()
             cur.close()
             logging.log(level=logging.INFO, msg=f"Got user {user}")
-            return user
+            return dict(user) if user else None
         except Exception as e:
-            logging.log(level=logging.ERROR, msg=e)
+            logging.log(logging.ERROR,msg=f"at getUserByID {e}")
 
 
     def getUserbyUsername(self, username):
@@ -214,7 +191,7 @@ class Worker():
             cur.close()
             return user
         except Exception as e:
-            logging.log(level=logging.ERROR, msg=e)
+            logging.log(logging.ERROR,msg=f"at getUserByUsername {e}")
 
 
     def setProfilePic(self,path, id = None, username = None):
@@ -229,7 +206,7 @@ class Worker():
             cur.close()
             logging.log(level=logging.INFO, msg=f"Updated profile_pic_path for user {username} with id {id} to {path}")
         except Exception as e:
-            logging.log(level=logging.ERROR, msg=e)
+            logging.log(logging.ERROR,msg=f"at setProfilePic {e}")
 
 
     def setUserName(self, user_id, username):
@@ -241,7 +218,7 @@ class Worker():
             cur.close()
             logging.log(level=logging.INFO, msg=f"Updated username for user {user_id} to {username}")
         except Exception as e:
-            logging.log(level=logging.ERROR, msg=e)
+            logging.log(logging.ERROR,msg=f"at setUserName {e}")
 
     # ---------------------------------------------------------
 
@@ -262,14 +239,16 @@ class Worker():
             self.makeCaptions(chat_id,cur)
             for user_id in user_ids:
                 cur.execute("SELECT chats FROM Users WHERE id=%s", (user_id,))
-                chats = json.dumps(cur.fetchone()['chats'] + [chat_id])
+                chats = dict(cur.fetchone())['chats']
+                # print(chats)
+                chats = json.dumps(chats + [chat_id])
                 cur.execute("UPDATE Users SET chats=%s WHERE ID=%s", (chats, user_id))
             self.base.commit()
             cur.close()
             logging.log(level=logging.INFO,msg="Success")
             return chat_id
         except Exception as e:
-            logging.log(level=logging.ERROR, msg=e)
+            logging.log(logging.ERROR,msg=f"at addChat {e}")
 
 
     def delChat(self, chat_id):
@@ -291,18 +270,20 @@ class Worker():
             cur.close()
             logging.log(level=logging.INFO,msg="Success")
         except Exception as e:
-            logging.log(level=logging.ERROR, msg=e)
+            logging.log(logging.ERROR,msg=f"at delChat {e}")
+
 
     def getChatById(self,chat_id):
         try:
             logging.log(level=logging.INFO,msg=f"Trying to get info about chat {chat_id}")
             cur = self.base.cursor(cursor_factory=psycopg2.extras.DictCursor)
             cur.execute("SELECT * FROM Chats WHERE ID= %s",(chat_id,))
-            chat = dict(cur.fetchone())
+            chat = cur.fetchone()
             cur.close()
-            return chat
+            return dict(chat) if chat else None
         except Exception as e:
-            logging.log(level=logging.ERROR, msg=e)
+            logging.log(logging.ERROR,msg=f"at getChatByID {e}")
+
 
     def getUserChats(self, id=None,username=None):
         try:
@@ -321,7 +302,7 @@ class Worker():
                 chat = cur.fetchone()
                 if chat['is_direct']:
                     users = chat['users']
-                    print(users)
+                    # print(users)
                     users.remove(int(user['id']))
                     to_user_id = users[0]
                     to_user = self.getUserbyID(to_user_id)
@@ -336,7 +317,23 @@ class Worker():
             cur.close()
             return chats
         except Exception as e:
-            logging.log(level=logging.ERROR, msg=e)
+            logging.log(logging.ERROR,msg=f"at getUserChats {e}")
+
+
+    def getUserChatsCheck(self, user_id):
+        try:
+            cur = self.base.cursor(cursor_factory=psycopg2.extras.DictCursor)
+            cur.execute("SELECT chats FROM Users WHERE ID=%s",(user_id))
+            chats = cur.fetchone()[0]
+            # print(chats)
+            res = []
+            for i in chats:
+                cur.execute("SELECT * FROM Chats WHERE ID=%s",(i,))
+                res.append(dict(cur.fetchone()))
+            # print(res)
+            return res
+        except Exception as e:
+            logging.log(logging.ERROR, msg=f"at getUserChatsCheck {e}")
 
 
     # --------------------MESSAGE------------------------------
@@ -348,27 +345,35 @@ class Worker():
             self.base.commit()
             cur.close()
         except Exception as e:
-            logging.log(level=logging.ERROR, msg=e)
+            logging.log(logging.ERROR,msg=f"at handleMessagePost{e}")
         pass
 
 
     def handleMessageGet(self, chat_id):
-        try:
+        # try:
             logging.log(level=logging.INFO,msg=f'Getting messages from chat {chat_id}')
             cur = self.base.cursor(cursor_factory=psycopg2.extras.DictCursor)
             cur.execute("SELECT * FROM Chats WHERE ID =%s", (chat_id,))
-            chat = cur.fetchone()
-            cur.execute("SELECT * FROM Chat_"+chat_id+ " ORDER BY ID DESC LIMIT 100")
+            chat = dict(cur.fetchone())
+            print(chat)
+            cur.execute("SELECT * FROM Chat_"+chat_id+" ORDER BY ID DESC LIMIT 100")
             messages = [dict(i) for i in cur.fetchall()]
             users = {user_id:self.getUserbyID(user_id) for user_id in chat['users']}
+            print(messages)
+            print(users)
             for message in messages:
-                message.__setitem__('from_user', users[message['from_user']])
+                print(users.get(message['from_user']))
+                message.__setitem__('from_user', users.get(message['from_user']))
                 message.__setitem__("send_date",message['send_date'].strftime("%H:%M"))
+                print(message)
             logging.log(level=logging.INFO, msg=f'Success')
             cur.close()
             return messages
-        except Exception as e:
-            logging.log(level=logging.ERROR, msg=e)
+        # except Exception as e:
+        #     logging.log(logging.ERROR,msg=f"at handleMessageGet{e}")
+
+
+
 
     # ---------------------------------------------------------
 

@@ -16,26 +16,30 @@
             console.log('sent request');
             e.preventDefault();
         };
-        socket.on('founduser', function(answer){
-            console.log('recieved answer', answer);
-            document.getElementById('body').innerHTML = "";
-            if(answer!=false){
-                var div = document.createElement('div');
-                div.setAttribute('href', {{url_for('chats')}});
-                div.innerHTML =
-                    `<div class="avatar" onclick='createChat(${answer['id']})' style="width: 30px; height: 30px;"><img src="${answer['profile_pic_path']}"  style="width: 30px; height: 30px;">
-                        <div class="text">
-                          <div class="name-and-time">
-                              <div class="name">${answer['username']}</div>
-                          </div>
-                        </div>
-                    </div>`;
-                document.getElementById('body').appendChild(div);
-            } else {
-                var div = document.createElement('div');
-                div.innerHTML = `<div class="text">Такого пользователя нет</div>`;
-                document.getElementById('body').appendChild(div);
-            }
+        socket.on('founduser', function(answers){
+                console.log('recieved answer', answers);
+                document.getElementById('body').innerHTML = "";
+                function u(answer){
+                        var div = document.createElement('div');
+                        console.log('rendering div')
+                        div.setAttribute('href', {{url_for('chats')}});
+                        div.innerHTML =
+                            `<div class="avatar" onclick='createChat(${answer['id']})' style="width: 30px; height: 100px;"><img src="${answer['profile_pic_path']}"  style="width: 30px; height: 30px;">
+                                <div class="text">
+                                  <div class="name-and-time">
+                                      <div class="name">${answer['username']}</div>
+                                  </div>
+                                </div>
+                            </div>`;
+                        document.getElementById('body').appendChild(div);
+                    }
+                if(answers!=false){
+                    answers.forEach((answer)=> u(answer));
+                } else {
+                    var div = document.createElement('div');
+                    div.innerHTML = `<div class="text">Такого пользователя нет</div>`;
+                    document.getElementById('body').appendChild(div);
+                }
         });
         var users = [];
         function createChat(user_id){
@@ -50,7 +54,7 @@
         }
         function createGroup(){
             console.log('checkbox checked, creating chat')
-            socket.emit('createchat',{'is_direct':false,'user_id': users});
+            socket.emit('createchat',{'is_direct':false,'user_id': users,'chatname':document.getElementById('chatname').value});
         }
         socket.on('redirect_to_chat',function(chat_id){
             document.location.href = 'chats/'+chat_id;
@@ -61,7 +65,9 @@
             if(checked==true){
                 var div = document.createElement('div');
                 div.setAttribute('href', {{url_for('chats')}});
-                div.innerHTML = `<input type="button" id="group_button" name="group_button" onclick="createGroup()" value="Создать группу"/>`;
+                div.innerHTML =
+                `<input type="button" id="group_button" name="group_button" onclick="createGroup()" value="Создать группу"/>
+                <input type="text" name="chatname" id = 'chatname'/>`;
                 document.getElementById('button_space').appendChild(div);
             } else {
                 document.getElementById('button_space').innerHTML = "";
@@ -73,6 +79,7 @@
         <input type="submit" id="sender" name="sender" onclick="handleFindUser(event)"/>
         <p>создать группу?</p>
         <input type="checkbox" name="group" id = 'group' onclick="handleCheckbox()"/>
+
 
     </form>
     <div id="button_space">

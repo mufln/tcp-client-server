@@ -99,9 +99,13 @@ def logout():
 @login_required
 def chats():
     logging.log(logging.INFO,msg=f'Got request for listing main page from user {current_user.get_id()}')
+    thisuser = db.getUserbyID(current_user.get_id())
+    # print(thisuser)
+    if thisuser==None:
+        logout_user()
+        redirect('login')
     chats = db.getUserChats(id = current_user.get_id())
     logging.log(logging.INFO,f'got chats {chats}')
-    thisuser = db.getUserbyID(current_user.get_id())
     return render_template("chats.html",users=chats,thisuser=thisuser)
 
 
@@ -110,14 +114,23 @@ def chats():
 def messages(chat_id):
     # print(chat_id)
     text = request.form.get('message_text')
-    # print(text)
+    chat = db.getChatById(chat_id)
+    # print(chat)
+    if chat==None or int(current_user.get_id()) not in chat['users']:
+        # print(int(current_user.get_id()),chat['users'])
+        return redirect("/chats/")
     if text:
         db.handleMessagePost(chat_id,current_user.get_id(),text)
     thisuser = db.getUserbyID(current_user.get_id())
     chats = db.getUserChats(id=current_user.get_id())
     chat = [i for i in chats if i['id']==int(chat_id)][0]
-    messages = db.handleMessageGet(chat_id)[::-1]
+    messages = db.handleMessageGet(chat_id)
+    print(messages)
+    if messages:
+        messages=messages[::-1]
     return render_template("chat.html", messages = messages, users=chats, thisuser=thisuser, chat = chat)
+
+
 
 
 @app.route('/settings', methods=['POST', 'GET'])
@@ -146,7 +159,7 @@ def handle_message(data):
     data['from_user'].__setitem__('profile_pic_path',url_for('static',filename=data['from_user']['profile_pic_path']))
     data.__setitem__('send_date', datetime.datetime.now().strftime('%H:%M'))
     # join_room(data['room'])
-    emit('message_recieve',data,broadcast=True)
+    emit('message_recieve',data,broadcast=True, to=data['chat_id'])
 
 
 @socketio.on('connection')
@@ -160,10 +173,12 @@ def connect(data):
 def finduser(data):
     logging.log(level=logging.INFO,msg= f'recieved find user request for username: {data}')
     # join_room(data['chat_id'])
-    user = db.isUserExist(data['username'])
-    if user:
-        user['profile_pic_path'] = url_for('static',filename=user['profile_pic_path'])
-    emit('founduser', user)
+    users = db.getUsersByName(data['username'])
+    print(users)
+    if users:
+        for user in users:
+            user['profile_pic_path'] = url_for('static',filename=user['profile_pic_path'])
+    emit('founduser', users if users else False)
 
 
 @socketio.on('createchat')
@@ -171,14 +186,21 @@ def createchat(data):
     logging.log(level=logging.INFO,msg= f'recieved create chat request for user_id: {data}')
     # join_room(data['chat_id'])
     if data['is_direct']:
-        if not int(data['user_id'][0])==int(current_user.get_id()): logging.log(level=logging.INFO,msg='Creating chat')
-        else: return redirect('createchat')
+        chats = db.getUserChatsCheck(current_user.get_id())
+        if not int(data['user_id'][0])==int(current_user.get_id()):
+            logging.log(level=logging.INFO,msg='Creating chat')
+        else:
+            return redirect('createchat')
+        for i in chats:
+            if data['user_id'][0] in i['users'] and i['is_direct']:
+                emit('redirect_to_chat', i['id'], JSON=False)
+                return
+
     else:
         if int(current_user.get_id()) in data['user_id']:
             return redirect('createchat')
-    chat_id = db.addChat([int(current_user.get_id())]+data['user_id'],data['is_direct'])
+    chat_id = db.addChat([int(current_user.get_id())]+data['user_id'],data['is_direct'],data['chatname'] if not data['is_direct'] else None)
     emit('redirect_to_chat', chat_id, JSON=False)
-    return redirect('createchat')
 
 
 
