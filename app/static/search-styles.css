@@ -49,7 +49,6 @@ body, html{
     display: flex;
     flex-direction: column;
     border-radius: 10px;
-    margin: 10px;
     padding: 5px;
 
     textarea::-webkit-search-decoration,
@@ -57,11 +56,6 @@ body, html{
     textarea::-webkit-search-results-button,
     textarea::-webkit-search-results-decoration {
     -webkit-appearance:none;
-    }
-
-    .search-field, .new-group{
-        display: flex;
-        flex-direction: row;
     }
     .search-field>img {width: 20px;}
     .avatar>img{
@@ -75,6 +69,16 @@ body, html{
         background: none;
         border: none;
     }
+}
+
+.search-field, .new-group{
+    display: flex;
+    flex-direction: row;
+}
+
+.box{
+    width: 20px;
+    height: 20px;
 }
 
 button:hover{
