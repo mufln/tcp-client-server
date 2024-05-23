@@ -28,11 +28,19 @@ body, html{
 .app{
     max-width: 50%;
     min-width: 30%;
+    max-height: 90%;
 }
 
 .app, .wrapper{
     display: flex;
     flex-direction: column;
+}
+
+.wrapper{
+    overflow: auto;
+    ::-webkit-scrollbar{
+        width: 0px;
+    }
 }
 
 .search{
@@ -41,7 +49,6 @@ body, html{
     display: flex;
     flex-direction: column;
     border-radius: 10px;
-    margin: 10px;
     padding: 5px;
 
     textarea::-webkit-search-decoration,
@@ -49,11 +56,6 @@ body, html{
     textarea::-webkit-search-results-button,
     textarea::-webkit-search-results-decoration {
     -webkit-appearance:none;
-    }
-
-    .search-field, .new-group{
-        display: flex;
-        flex-direction: row;
     }
     .search-field>img {width: 20px;}
     .avatar>img{
@@ -67,19 +69,19 @@ body, html{
         background: none;
         border: none;
     }
-    display: flex;
-    flex-direction: column;
-    ::-webkit-scrollbar{
-        width: 0px;
-    }
 }
 
-button:hover{
+.box{
+    width: 20px;
+    height: 20px;
+}
+
+.avatar:hover, button:hover{
     cursor: pointer;
     opacity: 0.5;
 }
 
-body, .user-info, header, .footer, .file{
+body, .user-info, .search-field, .new-group, .new-button{
     display: flex;
     align-items: center;
     flex-direction: row;
@@ -112,17 +114,21 @@ body, .user-info, header, .footer, .file{
   font-size: smaller;
   font-style: italic;
   color: #4373cc;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
 textarea, .text-field{
-        resize: none;
-        width: 100%;
-        padding: 2px 5px;
-        border-radius: 30px;
-        border: solid;
-        border-color: #9BB2DD;
-        font-size: smaller;
-    }
+    resize: none;
+    width: 100%;
+    height: 20px;
+    padding: 2px 5px;
+    border-radius: 30px;
+    border: solid;
+    border-color: #9BB2DD;
+    font-size: smaller;
+}
 
  textarea:focus{
     outline: 0 !important;
