@@ -1,16 +1,11 @@
 
 @font-face {
     font-family: "Roboto";
-    /* Браузер сначала попробует найти шрифт локально */
-    src: local("Roboto"),
-         /* Если не получилось, загрузит woff2 */
-         url("/fonts/roboto.woff2") format("woff2"),
-         /* Если браузер не поддерживает woff2, загрузит woff */
-         url("/fonts/roboto.woff") format("woff");
+    src: local("Roboto");
   }
 
 * {
-    font-family: "Urbanist", "Roboto", "Arial";
+    font-family: "Roboto", "Arial";
     font-size: medium;
 }
 
@@ -89,19 +84,21 @@ input{
 
 .pin {
     border-radius: 50%;
-    height: 30px;
-    width: 30px;
+    height: 50px;
+    width: 50px;
     margin: 20px;
     img {
-        height: 30px;
-        width: 30px;
+        border-radius: 50%;
+        height: 50px;
+        width: 50px;
+        object-fit: cover;
     }
     input {
         visibility: hidden;
     }
 }
 
-#enter, #changelogin, #backtochats, #logout{
+.button {
     font-size: medium;
     font-weight: bold;
     margin: 10px 0px;
@@ -111,8 +108,9 @@ input{
     color: white;
 }
 
-#enter, #changelogin, #backtochats, #logout:hover, label:hover{
-    cursor: pointer;
-    opacity: 0.5;
+.button, label{
+    :hover{
+        cursor: pointer;
+        opacity: 0.5;
+    }
 }
-

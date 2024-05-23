@@ -29,14 +29,14 @@
         {% endwith %}
       <form class="login" method="POST" >
         {{form.hidden_tag()}}
-        <input type="text" id="name" name="username" placeholder="Новый логин" required>
-        <button id="changelogin" name="changelogin">Изменить логин</button>
+        <input type="text" id="name" name="username" placeholder="Новый логин" class="field" required>
+        <button id="changelogin" name="changelogin" class="button">Изменить логин</button>
       </form>
       <a href="{{ url_for('chats') }}">
-        <button id="backtochats" name="backtochats"  style="background-color: white; color: #9bb2dd;">Вернуться к чатам</button>
+        <button id="backtochats" name="backtochats" class="button" style="background-color: white; color: #9bb2dd;">Вернуться к чатам</button>
       </a>
       <a href="{{ url_for('logout') }}">
-        <button id="logout" name="logout" style="background-color: white; color: firebrick;">Выйти из аккаунта</button>
+        <button id="logout" name="logout" class="button" style="background-color: white; color: firebrick;">Выйти из аккаунта</button>
       </a>
     </div>
 {% endblock %}

@@ -3,6 +3,7 @@
 <head>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{url_for('static',filename='search-styles.css)}}">
     <title>Title</title>
 </head>
 <body>
@@ -24,11 +25,14 @@
                         console.log('rendering div')
                         div.setAttribute('href', {{url_for('chats')}});
                         div.innerHTML =
-                            `<div class="avatar" onclick='createChat(${answer['id']})' style="width: 30px; height: 100px;"><img src="${answer['profile_pic_path']}"  style="width: 30px; height: 30px;">
-                                <div class="text">
-                                  <div class="name-and-time">
-                                      <div class="name">${answer['username']}</div>
-                                  </div>
+                            `<div class="chat" onclick='createChat(${answer['id']})'>
+                                <div class="user-info">
+                                    <div  class="avatar" style="width: 30px; height: 30px;">
+                                        <img src="${answer['profile_pic_path']}"  style="width: 30px; height: 30px;">
+                                    </div>
+                                    <div class="text-info">
+                                        <div class="name">${answer['username']}</div>
+                                    </div>
                                 </div>
                             </div>`;
                         document.getElementById('body').appendChild(div);
@@ -66,21 +70,28 @@
                 var div = document.createElement('div');
                 div.setAttribute('href', {{url_for('chats')}});
                 div.innerHTML =
-                `<input type="button" id="group_button" name="group_button" onclick="createGroup()" value="Создать группу"/>
-                <input type="text" name="chatname" id = 'chatname'/>`;
+                `<input type="text" class="text-field" name="chatname" id = 'chatname' placeholder="Введите название группы"/>
+                 <label for="group_button">
+                    <img src=" {{url_for('static',filename='new.png')}} ">
+                 </label>  
+                 <input type="button" id="group_button" name="group_button" onclick="createGroup()" value="Создать группу"/>`;
                 document.getElementById('button_space').appendChild(div);
             } else {
                 document.getElementById('button_space').innerHTML = "";
             }
         }
     </script>
-    <form>
-        <textarea rows="1" id="message_text" name="message_text" placeholder="поиск"></textarea>
-        <input type="submit" id="sender" name="sender" onclick="handleFindUser(event)"/>
-        <p>создать группу?</p>
-        <input type="checkbox" name="group" id = 'group' onclick="handleCheckbox()"/>
-
-
+    <form class="search">
+        <div class="search-field">
+            <textarea rows="1" id="message_text" name="message_text" placeholder="поиск" class="text-field"></textarea>
+            <button type="submit" id="sender" name="sender" onclick="handleFindUser(event)">
+                <img src=" {{url_for('static',filename='search.png')}} " style="width: 20px;">
+            </button>
+        </div>
+        <div class="new-group">
+            <p>Создать группу?</p>
+            <input type="checkbox" name="group" id = 'group' onclick="handleCheckbox()"/>
+        </div>
     </form>
     <div id="button_space">
 

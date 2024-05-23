@@ -19,9 +19,9 @@
         {% endwith %}
     <form class="login" method="post">
         {{form.hidden_tag()}}
-        <input type="text" id="name" name="username" required>
-        <input type="password" id="password" name="password" required>
-        <input type="submit" id="enter" name="submit" value="Войти">
+        <input type="text" id="name" name="username" class="field" required>
+        <input type="password" id="password" name="password" class="field" required>
+        <input type="submit" id="enter" name="submit" class="button" value="Войти">
     </form>
     <div class="singin"> У Вас ещё нет учётной записи? <a href="{{ url_for('register') }}">Регистрация</a></div>
 </div>

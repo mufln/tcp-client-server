@@ -1,4 +1,14 @@
 
+@font-face {
+    font-family: "Roboto";
+    src: local("Roboto");
+  }
+
+* {
+    font-family: "Roboto", "Arial";
+    font-size: medium;
+}
+
 body, html{
     top: 0;
     left: 0;
@@ -10,7 +20,7 @@ body, html{
     position: relative;
     display: flex;
     flex-direction: column;
-    justify-items: center;
+    justify-content: center;
     align-items: center;
 
 }
@@ -18,6 +28,8 @@ body, html{
 .search{
 
     background-color: #d1e1ff;
+    display: flex;
+    flex-direction: column;
     border-radius: 10px;
     max-width: 50%;
     min-width: 30%;
@@ -31,30 +43,16 @@ body, html{
     -webkit-appearance:none;
     }
 
-    .search-field{
+    .search-field, .new-group{
         display: flex;
         flex-direction: row;
-    }
-
-    textarea{
-        resize: none;
-        width: 100%;
-        padding: 2px 5px;
-        border-radius: 30px;
-        border: solid;
-        border-color: #9BB2DD;
-        font-size: smaller;
-    }
-    
-    textarea:focus{
-        outline: 0 !important;
     }
     .search-field>img {width: 20px;}
     .avatar>img{
         height: 30px;
         width: 30px;
     }
-    .last-mess, .name{
+    .name{
         font-size: smaller;
     }
     button{
@@ -101,3 +99,34 @@ body, .user-info, header, .footer, .file{
     white-space: nowrap;
     overflow: hidden;
 }
+
+.new-group{
+  font-size: smaller;
+  font-style: italic;
+  color: #4373cc;
+}
+
+textarea, .text-field{
+        resize: none;
+        width: 100%;
+        padding: 2px 5px;
+        border-radius: 30px;
+        border: solid;
+        border-color: #9BB2DD;
+        font-size: smaller;
+    }
+
+ textarea:focus{
+    outline: 0 !important;
+ }
+
+label>img{
+  border-radius: 50%;
+  height: 30px;
+  width: 30px;
+  object-fit: cover;
+}
+
+#group_button {
+        visibility: hidden;
+    }
