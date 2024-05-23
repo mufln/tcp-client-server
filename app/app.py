@@ -152,12 +152,14 @@ def settings():
             filename = secure_filename(f.filename)
             f.save(os.path.join('static', filename))
             db.setProfilePic(filename,int(current_user.get_id()))
+            flash('фото профиля изменено')
         # filename = secure_filename(f.filename)
         # f.save(os.path.join('static', filename))
         username = request.form.get('username')
         print(f"username {username}")
         if username:
             db.setUserName(current_user.get_id(),username.lower())
+            flash('юзернейм изменен')
     user = db.getUserbyID(current_user.get_id())
     return render_template('settings.html',form=form,user=user)
 

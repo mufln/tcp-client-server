@@ -5,6 +5,33 @@
 <link rel="stylesheet" href="{{url_for('static',filename='base-styles.css')}}">
 {% endblock %}
 {% block content %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Получаем элемент input и изображение, которое мы хотим заменить
+        var fileInput = document.getElementById('docpicker');
+        var imageToReplace = document.getElementById('curpic');
+
+        // Добавляем обработчик события изменения для input
+        fileInput.addEventListener('change', function (event) {
+            // Получаем файл из input
+            var file = event.target.files[0];
+
+            // Убеждаемся, что файл является изображением
+            if (file && file.type.match('image.*')) {
+                // Создаем FileReader для чтения файла
+                var reader = new FileReader();
+
+                // Устанавливаем функцию, которая будет вызвана, когда файл будет прочитан
+                reader.onload = function (e) {
+                    // Обновляем источник изображения
+                    imageToReplace.src = e.target.result;
+                };
+
+                // Читаем файл как Data URL
+                reader.readAsDataURL(file);
+            }
+        });
+    });</script>
     <div class="app">
 
       <h1>Настройки</h1>
@@ -20,7 +47,7 @@
         <div class="logo">
         <label for="docpicker">
             <!--здесь нужна ава юзера, с чьего аккаунта мы сидим-->
-            <img src="{{url_for('static',filename=user['profile_pic_path'])}}" style="border-radius: 50%; height: 100px; width: 100px">
+            <img src="{{url_for('static',filename=user['profile_pic_path'])}}" id="curpic" name="curpic" style="border-radius: 50%; height: 100px; width: 100px">
         </label>
 
         <input
