@@ -54,8 +54,9 @@ body, .user-info, header, .footer, .file{
 }
 
 header, .footer{
+    min-height: 10%;
     width: 100%;
-    height: max-content;
+    /*height: max-content;*/
     background-color: white;
     position: relative;
 }
