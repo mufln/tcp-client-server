@@ -81,7 +81,7 @@ body, html{
     height: 20px;
 }
 
-button:hover{
+.avatar:hover, button:hover{
     cursor: pointer;
     opacity: 0.5;
 }
@@ -119,6 +119,9 @@ body, .user-info, header, .footer, .file{
   font-size: smaller;
   font-style: italic;
   color: #4373cc;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
 textarea, .text-field{

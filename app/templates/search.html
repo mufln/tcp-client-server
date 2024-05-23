@@ -71,10 +71,12 @@
                 div.setAttribute('href', {{url_for('chats')}});
                 div.innerHTML =
                 `<input type="text" class="text-field" name="chatname" id = 'chatname' placeholder="Введите название группы"/>
-                 <label for="group_button">
-                    <img src=" {{url_for('static',filename='new.png')}} ">
-                 </label>  
-                 <input type="button" id="group_button" name="group_button" onclick="createGroup()" value="Создать группу"/>`;
+                 <div class="new-button">
+                    <label for="group_button">
+                        <img src=" {{url_for('static',filename='new.png')}} ">
+                    </label>  
+                    <input type="button" id="group_button" name="group_button" onclick="createGroup()" value="Создать группу"/>
+                 </div>`;
                 document.getElementById('button_space').appendChild(div);
             } else {
                 document.getElementById('button_space').innerHTML = "";
