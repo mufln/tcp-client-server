@@ -71,11 +71,6 @@ body, html{
     }
 }
 
-.search-field, .new-group{
-    display: flex;
-    flex-direction: row;
-}
-
 .box{
     width: 20px;
     height: 20px;
@@ -86,7 +81,7 @@ body, html{
     opacity: 0.5;
 }
 
-body, .user-info, header, .footer, .file{
+body, .user-info, .search-field, .new-group{
     display: flex;
     align-items: center;
     flex-direction: row;
@@ -125,14 +120,15 @@ body, .user-info, header, .footer, .file{
 }
 
 textarea, .text-field{
-        resize: none;
-        width: 100%;
-        padding: 2px 5px;
-        border-radius: 30px;
-        border: solid;
-        border-color: #9BB2DD;
-        font-size: smaller;
-    }
+    resize: none;
+    width: 100%;
+    height: 30px;
+    padding: 2px 5px;
+    border-radius: 30px;
+    border: solid;
+    border-color: #9BB2DD;
+    font-size: smaller;
+}
 
  textarea:focus{
     outline: 0 !important;
