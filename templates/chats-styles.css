@@ -57,6 +57,7 @@ header, .footer{
 
 header {top: 0;}
 .footer {
+    padding: 10px 0px;
     max-height: 150px; 
     bottom: 0;
 }
@@ -152,6 +153,7 @@ header {top: 0;}
 
 textarea{
     width: 100%;
+    max-height: 150px;
     border: none;
     resize: none;
     overflow: auto;
@@ -254,13 +256,22 @@ a:link, a:visited {
 }
 
 .search{
+
+    background-color: #d1e1ff;
+    border-radius: 10px;
     margin: 10px;
+    padding: 5px;
 
     input::-webkit-search-decoration,
     input::-webkit-search-cancel-button,
     input::-webkit-search-results-button,
     input::-webkit-search-results-decoration {
     -webkit-appearance:none;
+    }
+
+    .search-field{
+        display: flex;
+        flex-direction: row;
     }
 
     input{
@@ -275,12 +286,18 @@ a:link, a:visited {
     input:focus{
         outline: 0 !important;
     }
-    img {width: 20px;}
+    .search-field>img {width: 20px;}
+    .avatar>img{
+        height: 30px;
+        width: 30px;
+    }
+    .last-mess, .name{
+        font-size: smaller;
+    }
     button{
         background: none;
         border: none;
     }
     display: flex;
-    flex-direction: row;
-    align-items: center;
+    flex-direction: column;
 }
