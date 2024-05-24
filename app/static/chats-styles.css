@@ -196,6 +196,9 @@ a:link, a:visited {
 .text .name, .text .time{
         font-size: small;    
     }
+.text .time{
+    margin: 0px 0px 0px 5px;
+}    
 .text img{
         border-radius: 10px;        
         object-fit: cover;
