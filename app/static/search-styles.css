@@ -62,7 +62,7 @@ body, html{
     }
 
 .search.search-field img {width: 20px;}
-.search.avatar img{
+.search .avatar img{
         height: 30px;
         width: 30px;
     }

@@ -188,12 +188,12 @@ a:link, a:visited {
     flex-direction: column;    
 }
 
-.text.name-and-time{
+.text .name-and-time{
     display: flex;        
     justify-content: space-between;
 }
 
-.text.name, .text.time{
+.text .name, .text .time{
         font-size: small;    
     }
 .text img{
