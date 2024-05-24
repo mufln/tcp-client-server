@@ -90,6 +90,10 @@ body, .user-info, .search-field, .new-group, .new-button{
     flex-direction: row;
 }
 
+.new-button{
+    margin: 5px;
+}
+
 .text-info{
     overflow: hidden;
     width: 100%;
