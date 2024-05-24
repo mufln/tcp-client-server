@@ -25,17 +25,23 @@ body, .user-info, header, .footer, .file{
 .text-info{
     overflow: hidden;    width: 100%;
 }
-header, .footer{    width: 100%;
-    height: max-content;    background-color: white;
+header, .footer{    
+    width: 100%;
+    height: max-content;   
+    background-color: white;
     position: relative;}
 header {top: 0;}
-.footer {    padding: 10px 0px;
-    max-height: 150px;     bottom: 0;
+.footer {    
+    padding: 10px 0px;
+    max-height: 150px;     
+    bottom: 0;
 }
-.avatar, .send{    margin: 10px;
+.avatar, .send{    
+    margin: 10px;
     border: none;
-}/**/
-img{        border-radius: 50%;
+}
+/**/
+.avatar img, .send img{        border-radius: 50%;
         height: 50px;        width: 50px;
         object-fit: cover; }
 .name{font-weight: bold;}
