@@ -45,12 +45,13 @@ body, html{
 }
 
 .logo{
-    img{
-        height: 90px;
-        width: 90px;
-        object-fit: cover;
-    }
     align-items: center;
+}
+
+.logo img{
+    height: 90px;
+    width: 90px;
+    object-fit: cover;
 }
 
 .app{
@@ -92,15 +93,16 @@ input{
     height: 50px;
     width: 50px;
     margin: 20px;
-    img {
-        border-radius: 50%;
-        height: 50px;
-        width: 50px;
-        object-fit: cover;
-    }
-    input {
-        visibility: hidden;
-    }
+}
+
+.pin img {
+    border-radius: 50%;
+    height: 50px;
+    width: 50px;
+    object-fit: cover;
+}
+.pin input {
+    visibility: hidden;
 }
 
 .button{

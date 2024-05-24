@@ -96,11 +96,14 @@ body, .user-info, .search-field, .new-group, .new-button{
 }
 
 .avatar{
+    border-radius: 50%;
     margin: 10px;
+    height: 50px;
+    width: 50px;
     border: none;
 }
 
-.avatar img {
+.avatar img{
     border-radius: 50%;
     height: 50px;
     width: 50px;
