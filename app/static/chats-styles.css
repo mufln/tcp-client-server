@@ -1,29 +1,45 @@
 @font-face {    font-family: "Roboto";
     src: local("Roboto");  }
 * {
-    font-family: "Urbanist", "Roboto", "Arial";    font-size: medium;
+    font-family: "Roboto", "Arial";    
+    font-size: medium;
 }
-body, html{    top: 0;
-    left: 0;    width: 100%;
-    height: 100%;    background-color: #9BB2DD;
-    padding: 0;    margin: 0;
-    overflow: hidden;}
+body, html{    
+    top: 0;
+    left: 0;    
+    width: 100%;
+    height: 100%;    
+    background-color: #9BB2DD;
+    padding: 0;    
+    margin: 0;
+    overflow: hidden;
+}
 body, .user-info, header, .footer, .file{
-    display: flex;    align-items: center;
-    flex-direction: row;}
+    display: flex;   
+    align-items: center;
+    flex-direction: row;
+}
 .chats-column, .message-column{
-    position: relative;    display: flex;
-    flex-direction: column;    width: 100%;
-    height: 100%;    overflow: hidden;
+    position: relative;    
+    display: flex;
+    flex-direction: column;    
+    width: 100%;
+    height: 100%;    
+    overflow: hidden;
 }
-.chats-column{    background-color: white;
+.chats-column{    
+    background-color: white;
 }
-.chats{    overflow: auto;
-    padding: 10px;}
+.chats{    
+    overflow: auto;
+    padding: 10px;
+}
 .chats::-webkit-scrollbar{
-    width: 0px;}
+    width: 0px;
+}
 .text-info{
-    overflow: hidden;    width: 100%;
+    overflow: hidden;    
+    width: 100%;
 }
 header, .footer{    
     width: 100%;
@@ -41,67 +57,108 @@ header {top: 0;}
     border: none;
 }
 /**/
-.avatar img, .send img{        border-radius: 50%;
-        height: 50px;        width: 50px;
-        object-fit: cover; }
+.avatar img, .send img{       
+    border-radius: 50%;
+    height: 50px;       
+    width: 50px;
+    object-fit: cover; 
+}
 .name{font-weight: bold;}
-.last-mess{color: gray;}.name, .last-mess{
-    text-overflow: ellipsis;    white-space: nowrap;
+.last-mess{color: gray;}
+.name, .last-mess{
+    text-overflow: ellipsis;    
+    white-space: nowrap;
     overflow: hidden;}
+
 .messages{
-    position: relative;    flex: 1;
-    overflow: auto;}
+    position: relative;    
+    flex: 1;
+    overflow: auto;
+}
 .pin {
-    border-radius: 50%;    height: 30px;
-    width: 30px;    margin: 20px;
+    border-radius: 50%;   
+    height: 30px;
+    width: 30px;    
+    margin: 20px;
     }
 .pin img {
-        height: 30px;        width: 30px;
+        height: 30px;        
+        width: 30px;
     }
-.pin input {        visibility: hidden;
+.pin input {        
+    visibility: hidden;
     }
-.send, .down{    border-radius: 50%;
+.send, .down{    
+    border-radius: 50%;
     height: 50px;
-    width: 50px;    margin: 10px;
+    width: 50px;    
+    margin: 10px;
 }
-.send input {        visibility: hidden;
+.send input {        
+    visibility: hidden;
     }
 .send img {
-        transform: scale(-1, 1);    }
+    transform: scale(-1, 1);    
+    }
 .down{
     position: fixed;    top: 90px;
     right: 20px;    
-}.down img {
-        transform: rotate(270deg);        height: 50px;
-        width: 50px;        border-radius: 50%;
-    }.down button {
-        visibility: hidden;    }
-.pin, .send{    align-self: flex-end;
 }
-.send:hover, .pin:hover{    opacity: 0.5;
+.down img {
+        transform: rotate(270deg);        
+        height: 50px;
+        width: 50px;       
+        border-radius: 50%;
 }
-.send:hover img,  .pin:hover img{        cursor: pointer;
-    }
-.text-field{    max-height: 100%;
-    flex: 1;    display: flex;
-    align-items: flex-end;    overflow: hidden;
+
+.down button {
+    visibility: hidden;    
 }
-textarea{    width: 100%;
-    max-height: 150px;    border: none;
-    resize: none;    overflow: auto;
+
+.pin, .send{    
+    align-self: flex-end;
 }
-textarea:focus{    outline:none!important;
+.send:hover, .pin:hover{    
+    opacity: 0.5;
 }
+.send:hover img,  .pin:hover img{        
+    cursor: pointer;
+}
+.text-field{    
+    max-height: 100%;
+    flex: 1;    
+    display: flex;
+    align-items: flex-end;    
+    overflow: hidden;
+}
+textarea{    
+    width: 100%;
+    max-height: 150px;    
+    border: none;
+    resize: none;    
+    overflow: auto;
+}
+textarea:focus{    
+    outline:none!important;
+}
+
 textarea::-webkit-scrollbar{
-    width: 0px;}
+    width: 0px;
+}
+
 a:hover{
-    cursor: pointer;}
+    cursor: pointer;
+}
+
 a {    
     text-decoration: none;
-    color: black;}
+    color: black;
+}
+
 a:link, a:visited {    
     text-decoration: none;
 }
+
 .message{    display: flex;
     flex-direction: row;    
     align-content: center;
@@ -116,20 +173,29 @@ a:link, a:visited {
     img{        width: 50px;
         height: 50px;    }
 }*/
-.text{    background-color: white;
-    padding: 10px;    border-radius: 10px;
-    max-width: 50%;    width: max-content;
-    display: flex;    white-space: pre-wrap;      /* CSS3 */   
+.text{    
+    background-color: white;
+    padding: 10px;    
+    border-radius: 10px;
+    max-width: 50%;    
+    width: max-content;
+    display: flex;    
+    white-space: pre-wrap;      /* CSS3 */   
     white-space: -moz-pre-wrap; /* Firefox */        
     white-space: -pre-wrap;     /* Opera <7 */   
     white-space: -o-pre-wrap;   /* Opera 7 */        
     word-wrap: break-word;     
-    flex-direction: column;    .name-and-time{
+    flex-direction: column;    
+}
+
+.text.name-and-time{
     display: flex;        
     justify-content: space-between;
-    }}
-.text .name, text .time{
-        font-size: small;    }
+}
+
+.text.name, .text.time{
+        font-size: small;    
+    }
 .text img{
         border-radius: 10px;        
         object-fit: cover;
@@ -141,7 +207,8 @@ a:link, a:visited {
         width: 50px;         
         height: 50px;
     }
-.new-chat-button{    display: flex;
+.new-chat-button{   
+    display: flex;
     align-items: center;
     flex-direction: row;    
     margin: 5px;
@@ -150,8 +217,9 @@ a:link, a:visited {
        margin: 0px 5px;
         width: 20px;        
         height: auto;
-        border-radius: 50%;    }
+        border-radius: 50%;    
+    }
 
-.new-chat-button:hover, button:hover, .search>a:hover{
+.new-chat-button:hover, button:hover, .search a:hover{
     cursor: pointer;    opacity: 0.5;
 }
