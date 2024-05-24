@@ -323,7 +323,7 @@ class Worker():
     def getUserChatsCheck(self, user_id):
         try:
             cur = self.base.cursor(cursor_factory=psycopg2.extras.DictCursor)
-            cur.execute("SELECT chats FROM Users WHERE ID=%s",(user_id))
+            cur.execute("SELECT chats FROM Users WHERE ID=%s",(user_id,))
             chats = cur.fetchone()[0]
             # print(chats)
             res = []
