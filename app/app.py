@@ -1,6 +1,8 @@
 import datetime
 import logging
 import asyncio
+import os
+
 import flask
 from cfg import *
 from hash import *
@@ -150,7 +152,7 @@ def settings():
         print(f"file {f}")
         if f:
             filename = secure_filename(f.filename)
-            f.save(os.path.join('static', filename))
+            f.save(os.path.join(os.getcwd(),'static', filename))
             db.setProfilePic(filename,int(current_user.get_id()))
             flash('фото профиля изменено')
         # filename = secure_filename(f.filename)
@@ -226,4 +228,4 @@ def createchat(data):
 
 
 if __name__ == "__main__":
-    socketio.run(app)
+    socketio.run(app,allow_unsafe_werkzeug=True)
