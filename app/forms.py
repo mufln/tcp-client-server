@@ -12,7 +12,7 @@ class RegisterForm(FlaskForm):
   username = StringField('username', validators=[DataRequired()])
   password1 = PasswordField('password1', validators=[DataRequired()])
   password2 = PasswordField('password2', validators=[DataRequired()])
-  docpicker = FileField('docpicker', validators=[DataRequired()])
+  docpicker = FileField('docpicker')
   # remember_me = BooleanField('Remember Me')
   # submit = SubmitField('Sign up')
 

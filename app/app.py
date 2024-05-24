@@ -77,8 +77,9 @@ def register():
         # imagefile = request.files.get('docpicker')
         # logging.log(logging.INFO, msg=f"image {imagefile}")
         f = form.docpicker.data
-        filename = secure_filename(f.filename)
-        f.save(os.path.join('static', filename))
+        if f:
+            filename = secure_filename(f.filename)
+            f.save(os.path.join('static', filename))
 
         password1 = request.form.get('password1')
         password2 = request.form.get('password2')
@@ -92,7 +93,7 @@ def register():
             logging.log(logging.INFO, msg='Password mismatch')
             flash('пароли не совпадают')
             return redirect('register')
-        db.registerUser(username,GeneratePasswordHash(password1),filename)
+        db.registerUser(username,GeneratePasswordHash(password1),filename if f else None)
         return redirect('login')
     return render_template("register.html", title='Sign up', form=form)
 
