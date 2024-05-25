@@ -90,15 +90,15 @@ input{
 
 .pin {
     border-radius: 50%;
-    height: 50px;
-    width: 50px;
+    height: 90px;
+    width: 90px;
     margin: 20px;
 }
 
 .pin img {
     border-radius: 50%;
-    height: 50px;
-    width: 50px;
+    height: 90px;
+    width: 90px;
     object-fit: cover;
 }
 .pin input {
